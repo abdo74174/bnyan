@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بنيان — الرئيسية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --primary: #1a4f8a;
+      --primary-dark: #0f3360;
+      --primary-light: #2d6dbf;
+      --accent: #2ecc87;
+      --accent-dark: #1ba866;
+      --gold: #c8a84b;
+      --gold-light: #f0d080;
+      --bg: #f5f7fa;
+      --bg2: #eef1f6;
+      --white: #fff;
+      --text1: #0f1f35;
+      --text2: #3a4f6a;
+      --text3: #6b82a0;
+      --border: #d4dde8;
+      --shadow: 0 2px 12px rgba(26, 79, 138, .09);
+      --shadow-md: 0 6px 24px rgba(26, 79, 138, .13);
+      --r: 10px;
+      --r-lg: 16px;
+      --r-xl: 24px;
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text1);
+      font-size: 15px;
+      line-height: 1.65;
+      direction: rtl
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: var(--shadow)
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary)
+    }
+
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .nav-links a {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all .18s;
+      text-decoration: none
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: var(--bg);
+      color: var(--primary)
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--r);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+      line-height: 1;
+      font-family: 'Cairo', sans-serif
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(26, 79, 138, .28)
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px)
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary)
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: #fff
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(46, 204, 135, .3)
+    }
+
+    .btn-accent:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px)
+    }
+
+    .btn-ghost {
+      background: var(--bg);
+      color: var(--text2);
+      border: 1.5px solid var(--border)
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--primary);
+      color: var(--primary)
+    }
+
+    .btn-lg {
+      padding: 14px 32px;
+      font-size: 16px
+    }
+
+    .btn-sm {
+      padding: 7px 14px;
+      font-size: 13px
+    }
+
+    /* ── HELPERS ── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px
+    }
+
+    .section {
+      padding: 72px 0
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(26, 79, 138, .08);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 20px;
+      letter-spacing: .03em;
+      margin-bottom: 12px
+    }
+
+    .section-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--text1);
+      margin-bottom: 10px
+    }
+
+    .section-sub {
+      color: var(--text3);
+      font-size: 16px;
+      max-width: 540px
+    }
+
+    .section-header {
+      margin-bottom: 48px
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700
+    }
+
+    .badge-green {
+      background: #e8f8f0;
+      color: #1ba866
+    }
+
+    .badge-blue {
+      background: #e3edf8;
+      color: var(--primary)
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow)
+    }
+
+    .text-center {
+      text-align: center
+    }
+
+    .text-muted {
+      color: var(--text3)
+    }
+
+    .fw-700 {
+      font-weight: 700
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border)
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 55%, var(--primary-light) 100%);
+      padding: 96px 0 80px;
+      overflow: hidden;
+      position: relative
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 64px;
+      align-items: center;
+      position: relative;
+      z-index: 1
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, .12);
+      color: rgba(255, 255, 255, .9);
+      border: 1px solid rgba(255, 255, 255, .2);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px
+    }
+
+    .hero-title {
+      font-size: 44px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 18px
+    }
+
+    .hero-title span {
+      color: var(--gold-light)
+    }
+
+    .hero-desc {
+      font-size: 17px;
+      color: rgba(255, 255, 255, .78);
+      line-height: 1.75;
+      margin-bottom: 36px
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap
+    }
+
+    .hero-note {
+      margin-top: 20px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, .5)
+    }
+
+    .hero-card {
+      background: rgba(255, 255, 255, .1);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: var(--r-xl);
+      padding: 28px
+    }
+
+    .hero-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px
+    }
+
+    .hero-kpi {
+      text-align: center;
+      background: rgba(255, 255, 255, .08);
+      border-radius: 12px;
+      padding: 16px 8px
+    }
+
+    .hero-kpi-val {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--gold-light)
+    }
+
+    .hero-kpi-lbl {
+      font-size: 11px;
+      color: rgba(255, 255, 255, .6);
+      margin-top: 2px
+    }
+
+    .hero-proj-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, .5);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px
+    }
+
+    .hero-proj-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px
+    }
+
+    .hero-fund-lbl {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: rgba(255, 255, 255, .65);
+      margin-bottom: 6px
+    }
+
+    .hero-fund-bar {
+      height: 7px;
+      background: rgba(255, 255, 255, .2);
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .hero-fund-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #5df0a8);
+      border-radius: 4px;
+      width: 73%
+    }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--primary-dark);
+      padding: 32px 0
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      text-align: center
+    }
+
+    .stat-item {
+      padding: 4px 20px;
+      border-left: 1px solid rgba(255, 255, 255, .1)
+    }
+
+    .stat-item:last-child {
+      border-left: none
+    }
+
+    .stat-val {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--gold-light)
+    }
+
+    .stat-lbl {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .55);
+      margin-top: 4px
+    }
+
+    /* ── PROJECT CARDS ── */
+    .proj-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all .22s;
+      cursor: pointer
+    }
+
+    .proj-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px)
+    }
+
+    .proj-card-img {
+      height: 190px;
+      background: var(--bg2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden
+    }
+
+    .proj-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s
+    }
+
+    .proj-card:hover .proj-card-img img {
+      transform: scale(1.08)
+    }
+
+    .proj-card-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(10, 25, 50, .55))
+    }
+
+    .proj-card-badges {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      left: 12px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    .proj-card-body {
+      padding: 20px
+    }
+
+    .proj-card-type {
+      font-size: 11px;
+      color: var(--text3);
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 4px
+    }
+
+    .proj-card-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text1);
+      margin-bottom: 4px
+    }
+
+    .proj-card-loc {
+      font-size: 13px;
+      color: var(--text3);
+      margin-bottom: 16px
+    }
+
+    .proj-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px
+    }
+
+    .proj-metric {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 10px 14px
+    }
+
+    .proj-metric-val {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--primary)
+    }
+
+    .proj-metric-val.green {
+      color: var(--accent-dark)
+    }
+
+    .proj-metric-lbl {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 1px
+    }
+
+    .prog-wrap {
+      margin-bottom: 16px
+    }
+
+    .prog-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 6px
+    }
+
+    .prog-bar {
+      height: 5px;
+      background: var(--bg2);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .prog-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light))
+    }
+
+    .proj-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid var(--border)
+    }
+
+    .proj-min {
+      font-size: 12px;
+      color: var(--text3)
+    }
+
+    /* ── WHY CARDS ── */
+    .why-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 28px;
+      box-shadow: var(--shadow)
+    }
+
+    .why-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px
+    }
+
+    .why-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 8px
+    }
+
+    .why-desc {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.7
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--primary-dark);
+      padding: 56px 0 28px
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px
+    }
+
+    .footer-logo-ico {
+      width: 32px;
+      height: 32px;
+      background: var(--gold);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .footer-logo-txt {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff
+    }
+
+    .footer-desc {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .45);
+      line-height: 1.75
+    }
+
+    .footer-col-ttl {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .8);
+      margin-bottom: 16px;
+      letter-spacing: .04em
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 9px
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .45);
+      cursor: pointer;
+      transition: color .15s
+    }
+
+    .footer-links a:hover {
+      color: rgba(255, 255, 255, .8)
+    }
+
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .3)
+    }
+
+    .footer-legal {
+      display: flex;
+      gap: 20px
+    }
+
+    .footer-legal a {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .3);
+      cursor: pointer
+    }
+
+    /* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero-inner{gap:32px}
+  .hero-title{font-size:36px}
+}
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;padding-top:40px}
+  .hero-card{display:block;max-width:480px;margin:32px auto 0}
+  .hero-title{font-size:32px;text-align:center}
+  .hero-desc{text-align:center}
+  .hero-actions{justify-content:center}
+  .hero-tag{margin:0 auto 20px;display:flex;width:fit-content}
+  .grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .nav-links{display:none}
+  .grid-3,.grid-4{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .hero-title{font-size:26px}
+  .section-title{font-size:24px}
+  .section{padding:48px 0}
+  .hero-kpi-row{grid-template-columns:1fr 1fr}
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-inner">
+    <a href="index.html" class="nav-logo" style="text-decoration:none">
+      <div class="nav-logo-icon" style="background:transparent">
+        <img src="assets/images/logo.png" alt="Bnyan" style="width:100%;height:100%;object-fit:contain">
+      </div>
+      بنيان
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">الرئيسية</a>
+      <a href="page2-projects.html">المشاريع</a>
+      <a href="page6-developer.html">للمطورين</a>
+      <a href="#how-section">كيف يعمل</a>
+    </div>
+      <div class="nav-actions">
+        <a href="page5-dashboard.html" class="btn btn-ghost btn-sm">تسجيل الدخول</a>
+        <a href="page2-projects.html" class="btn btn-primary btn-sm">ابدأ الاستثمار</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <circle cx="6" cy="6" r="5" fill="#2ecc87" />
+            <path d="M3.5 6l1.8 1.8L8.5 4.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          منصة عقارية موثوقة ومرخصة
+        </div>
+        <h1 class="hero-title">استثمر في العقارات<br>بسهولة و<span>أمان تام</span></h1>
+        <p class="hero-desc">بنيان تربطك بأفضل مشاريع التطوير العقاري في المملكة العربية السعودية — كل مشروع مُدقَّق
+          وموثوق، وكل ريال تستثمره بإشراف كامل وشفافية مطلقة.</p>
+        <div class="hero-actions">
+          <a href="page2-projects.html" class="btn btn-accent btn-lg">استعرض المشاريع ←</a>
+          <button class="btn btn-lg" style="color:#fff;background:transparent;border:2px solid rgba(255,255,255,.3)"
+            onclick="document.getElementById('how-section').scrollIntoView({behavior:'smooth'})">كيف يعمل؟</button>
+        </div>
+        <p class="hero-note">✓ مرخصة ومنظمة &nbsp;·&nbsp; ✓ حساب ضماني &nbsp;·&nbsp; ✓ تقارير شهرية</p>
+      </div>
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <div class="hero-proj-label">فرصة مميزة اليوم</div>
+        <div class="hero-proj-name">🏢 أبراج الرقي التجاري — الرياض</div>
+        <div class="hero-kpi-row">
+          <div class="hero-kpi">
+            <div class="hero-kpi-val">20%</div>
+            <div class="hero-kpi-lbl">عائد سنوي</div>
+          </div>
+          <div class="hero-kpi">
+            <div class="hero-kpi-val">24</div>
+            <div class="hero-kpi-lbl">شهراً</div>
+          </div>
+          <div class="hero-kpi">
+            <div class="hero-kpi-val">10K</div>
+            <div class="hero-kpi-lbl">أدنى ر.س</div>
+          </div>
+        </div>
+        <div class="hero-fund-lbl"><span>التمويل المُجمَّع</span><span>73%</span></div>
+        <div class="hero-fund-bar">
+          <div class="hero-fund-fill"></div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);text-align:left;margin-top:5px">متبقي: 810,000 ر.س</div>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-green">مخاطرة منخفضة</span>
+          <span class="badge" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8)">سكني راقٍ</span>
+        </div>
+        <a href="page3-detail.html" class="btn btn-accent" style="width:100%;margin-top:18px;text-decoration:none">عرض
+          تفاصيل المشروع ←</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="container stats-grid">
+      <div class="stat-item">
+        <div class="stat-val">+42م</div>
+        <div class="stat-lbl">ريال إجمالي التمويل</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">17</div>
+        <div class="stat-lbl">مشروعاً منتهياً بنجاح</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">18.4%</div>
+        <div class="stat-lbl">متوسط العائد السنوي</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">2,400+</div>
+        <div class="stat-lbl">مستثمر نشط</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED PROJECTS -->
+  <section class="section" id="projects-section">
+    <div class="container">
+      <div class="section-header" style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div>
+          <div class="tag">فرص مميزة</div>
+          <h2 class="section-title">مشاريع متاحة الآن</h2>
+          <p class="section-sub">مدروسة وموثقة — كل ما تحتاجه أمامك قبل أي قرار</p>
+        </div>
+        <a href="page2-projects.html" class="btn btn-outline">عرض الكل ←</a>
+      </div>
+      <div class="grid-3">
+        <!-- Card 1 -->
+        <div class="proj-card" onclick="location.href='page3-detail.html'">
+          <div class="proj-card-img">
+            <img src="assets/images/OIP.jpeg" alt="Project">
+            <div class="proj-card-img-overlay"></div>
+            <div class="proj-card-badges"><span class="badge badge-blue">تجاري</span><span
+                class="badge badge-green">منخفضة</span></div>
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-type">تطوير تجاري</div>
+            <div class="proj-card-name">أبراج الرقي التجاري</div>
+            <div class="proj-card-loc">📍 الرياض، حي النزهة</div>
+            <div class="proj-metrics">
+              <div class="proj-metric">
+                <div class="proj-metric-val green">20%</div>
+                <div class="proj-metric-lbl">عائد سنوي</div>
+              </div>
+              <div class="proj-metric">
+                <div class="proj-metric-val">24 شهراً</div>
+                <div class="proj-metric-lbl">المدة</div>
+              </div>
+            </div>
+            <div class="prog-wrap">
+              <div class="prog-header"><span class="fw-700" style="color:var(--text1)">73% مُموَّل</span><span
+                  class="text-muted">متبقي 810,000 ر.س</span></div>
+              <div class="prog-bar">
+                <div class="prog-fill" style="width:73%"></div>
+              </div>
+            </div>
+            <div class="proj-card-footer">
+              <div class="proj-min">حد أدنى <strong>10,000 ر.س</strong></div>
+              <a href="page3-detail.html" class="btn btn-primary btn-sm">التفاصيل ←</a>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="proj-card" onclick="location.href='page3-detail.html'">
+          <div class="proj-card-img">
+            <img src="assets/images/OIP (1).jpeg" alt="Project">
+            <div class="proj-card-img-overlay"></div>
+            <div class="proj-card-badges"><span class="badge badge-gold"
+                style="background:#fdf3dc;color:#a07820">فندقي</span><span class="badge badge-green">متوسطة</span></div>
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-type">شقق فندقية مُدرّة للدخل</div>
+            <div class="proj-card-name">مشروع بوابة جدة</div>
+            <div class="proj-card-loc">📍 جدة، الكورنيش الشمالي</div>
+            <div class="proj-metrics">
+              <div class="proj-metric">
+                <div class="proj-metric-val green">17%</div>
+                <div class="proj-metric-lbl">عائد سنوي</div>
+              </div>
+              <div class="proj-metric">
+                <div class="proj-metric-val">18 شهراً</div>
+                <div class="proj-metric-lbl">المدة</div>
+              </div>
+            </div>
+            <div class="prog-wrap">
+              <div class="prog-header"><span class="fw-700" style="color:var(--text1)">45% مُموَّل</span><span
+                  class="text-muted">متبقي 1.65م ر.س</span></div>
+              <div class="prog-bar">
+                <div class="prog-fill" style="width:45%"></div>
+              </div>
+            </div>
+            <div class="proj-card-footer">
+              <div class="proj-min">حد أدنى <strong>25,000 ر.س</strong></div>
+              <a href="page3-detail.html" class="btn btn-primary btn-sm">التفاصيل ←</a>
+            </div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="proj-card" onclick="location.href='page3-detail.html'">
+          <div class="proj-card-img">
+            <img src="assets/images/OIP (2).jpeg" alt="Project">
+            <div class="proj-card-img-overlay"></div>
+            <div class="proj-card-badges"><span class="badge badge-blue">سكني</span><span
+                class="badge badge-green">منخفضة</span></div>
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-type">تطوير سكني راقٍ</div>
+            <div class="proj-card-name">مجمع النخيل السكني</div>
+            <div class="proj-card-loc">📍 الدمام، حي الشاطئ</div>
+            <div class="proj-metrics">
+              <div class="proj-metric">
+                <div class="proj-metric-val green">16%</div>
+                <div class="proj-metric-lbl">عائد سنوي</div>
+              </div>
+              <div class="proj-metric">
+                <div class="proj-metric-val">30 شهراً</div>
+                <div class="proj-metric-lbl">المدة</div>
+              </div>
+            </div>
+            <div class="prog-wrap">
+              <div class="prog-header"><span class="fw-700" style="color:var(--text1)">88% مُموَّل</span><span
+                  class="text-muted">متبقي 360,000 ر.س</span></div>
+              <div class="prog-bar">
+                <div class="prog-fill" style="width:88%"></div>
+              </div>
+            </div>
+            <div class="proj-card-footer">
+              <div class="proj-min">حد أدنى <strong>10,000 ر.س</strong></div>
+              <a href="page3-detail.html" class="btn btn-primary btn-sm">التفاصيل ←</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="tag">كيف يعمل</div>
+        <h2 class="section-title">أربع خطوات للاستثمار</h2>
+        <p class="section-sub" style="margin:0 auto">من اختيار المشروع إلى استلام عوائدك — كل شيء واضح وميسّر</p>
+      </div>
+      <div class="grid-4">
+        <div class="card" style="padding:24px;text-align:center">
+          <div
+            style="width:48px;height:48px;border-radius:50%;background:var(--bg2);color:var(--primary);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+            ١</div>
+          <div style="font-size:16px;font-weight:800;margin-bottom:8px">اختر مشروعك</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.65">استعرض الفرص المتاحة مع التفاصيل المالية
+            الكاملة</div>
+        </div>
+        <div class="card" style="padding:24px;text-align:center">
+          <div
+            style="width:48px;height:48px;border-radius:50%;background:var(--bg2);color:var(--primary);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+            ٢</div>
+          <div style="font-size:16px;font-weight:800;margin-bottom:8px">راجع التفاصيل</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.65">اطلع على الأرقام والمستندات قبل أي قرار</div>
+        </div>
+        <div class="card" style="padding:24px;text-align:center">
+          <div
+            style="width:48px;height:48px;border-radius:50%;background:var(--bg2);color:var(--primary);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+            ٣</div>
+          <div style="font-size:16px;font-weight:800;margin-bottom:8px">استثمر بثقة</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.65">حدد مبلغك وأكّد الاستثمار بخطوات بسيطة</div>
+        </div>
+        <div class="card" style="padding:24px;text-align:center">
+          <div
+            style="width:48px;height:48px;border-radius:50%;background:var(--bg2);color:var(--primary);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+            ٤</div>
+          <div style="font-size:16px;font-weight:800;margin-bottom:8px">تابع عوائدك</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.65">تقارير دورية وتحديثات مستمرة من لوحة تحكمك
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- WHY BANIYAN -->
+  <section class="section" id="why-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="tag">لماذا بنيان؟</div>
+        <h2 class="section-title">منصة بُنيت على الثقة</h2>
+        <p class="section-sub">لا وعود مبهمة — كل معلومة موجودة قبل قرارك</p>
+      </div>
+      <div class="grid-3">
+        <div class="why-card">
+          <div class="why-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <div class="why-title">شفافية كاملة</div>
+          <div class="why-desc">كل مستند متاح قبل الاستثمار — دراسة الجدوى، العقود، التراخيص، وتقييمات مستقلة.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon" style="background:var(--accent-dark)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+              <path d="M9 12l2 2 4-4" />
+              <path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z" />
+            </svg>
+          </div>
+          <div class="why-title">مشاريع مُدقَّقة</div>
+          <div class="why-desc">كل مشروع يمر بتدقيق قانوني ومالي صارم قبل عرضه على المنصة.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon" style="background:var(--gold)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg>
+          </div>
+          <div class="why-title">متابعة مستمرة</div>
+          <div class="why-desc">تقارير شهرية وتحديثات فورية على كل مرحلة من مراحل المشروع.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo">
+            <div class="footer-logo-ico">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f3360" stroke-width="2.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              </svg>
+            </div>
+            <div class="footer-logo-txt">بنيان</div>
+          </div>
+          <p class="footer-desc">منصة استثمار عقاري تربط المستثمرين بمشاريع تطوير عقاري مختارة بعناية وشفافية كاملة.</p>
+        </div>
+        <div>
+          <div class="footer-col-ttl">المنصة</div>
+          <div class="footer-links"><a href="page2-projects.html">المشاريع</a><a href="#how-section">كيف يعمل</a><a
+              href="page6-developer.html">للمطورين</a></div>
+        </div>
+        <div>
+          <div class="footer-col-ttl">المستثمر</div>
+          <div class="footer-links"><a href="page5-dashboard.html">لوحة التحكم</a><a>سؤال وجواب</a><a>الدعم</a></div>
+        </div>
+        <div>
+          <div class="footer-col-ttl">قانوني</div>
+          <div class="footer-links"><a>شروط الاستخدام</a><a>الخصوصية</a><a>الإفصاح والمخاطر</a></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">© 2025 بنيان. جميع الحقوق محفوظة.</div>
+        <div class="footer-legal"><a>الشروط</a><a>الخصوصية</a></div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

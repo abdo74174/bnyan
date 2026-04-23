@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بنيان — لوحة المطور</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#1a4f8a;--primary-dark:#0f3360;--primary-light:#2d6dbf;
+  --accent:#2ecc87;--accent-dark:#1ba866;--gold:#c8a84b;--gold-light:#f0d080;
+  --bg:#f5f7fa;--bg2:#eef1f6;--white:#fff;
+  --text1:#0f1f35;--text2:#3a4f6a;--text3:#6b82a0;
+  --border:#d4dde8;--shadow:0 2px 12px rgba(26,79,138,.09);--shadow-md:0 6px 24px rgba(26,79,138,.13);
+  --r:10px;--r-lg:16px;
+}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text1);font-size:15px;direction:rtl}
+.navbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;color:var(--primary)}
+.nav-logo-icon{width:38px;height:38px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.nav-links a{padding:7px 14px;border-radius:8px;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;text-decoration:none;transition:all .18s}
+.nav-links a:hover{background:var(--bg);color:var(--primary)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s;line-height:1;font-family:'Cairo',sans-serif}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.btn-ghost{background:var(--bg);color:var(--text2);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-sm{padding:7px 14px;font-size:13px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.badge-green{background:#e8f8f0;color:#1ba866}
+.badge-blue{background:#e3edf8;color:var(--primary)}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.section-sm{padding:48px 0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+/* Dev Header */
+.dev-header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));padding:40px 0}
+.dev-logo-wrap{display:flex;align-items:center;gap:20px;margin-bottom:24px}
+.dev-logo-box{width:72px;height:72px;border-radius:16px;background:var(--bg2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.dev-logo-box img{width:100%;height:100%;object-fit:cover}
+.dev-name{font-size:26px;font-weight:800;color:#fff}
+.dev-meta{font-size:13px;color:rgba(255,255,255,.6);margin-top:4px}
+.dev-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.dev-kpi{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--r-lg);padding:18px}
+.dev-kpi-val{font-size:24px;font-weight:800;color:var(--gold-light)}
+.dev-kpi-lbl{font-size:12px;color:rgba(255,255,255,.55);margin-top:3px}
+/* Cards */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow);margin-bottom:22px}
+.card-title{font-size:15px;font-weight:800;color:var(--text1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+/* Progress */
+.prog-bar{height:10px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.prog-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+/* Form */
+.field-lbl{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px}
+.field-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;font-family:'Cairo',sans-serif;color:var(--text1);outline:none;background:var(--bg);resize:vertical}
+.field-input:focus{border-color:var(--primary);background:#fff}
+.field-select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;font-family:'Cairo',sans-serif;color:var(--text1);outline:none;background:var(--bg);cursor:pointer}
+/* Table */
+table{width:100%;border-collapse:collapse}
+thead th{padding:10px 14px;text-align:right;font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;background:var(--bg);border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg)}
+tbody td{padding:12px 14px;font-size:14px;vertical-align:middle}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}
+@media(max-width:1024px){.dev-kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+@media(max-width:640px){.dev-kpis{grid-template-columns:1fr}.nav-links{display:none}.dev-logo-wrap{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" style="text-decoration:none">
+      <div class="nav-logo-icon" style="background:transparent">
+        <img src="assets/images/logo.png" alt="Bnyan" style="width:100%;height:100%;object-fit:contain">
+      </div>
+      بنيان
+    </a>
+    <div class="nav-links" style="display:flex;gap:4px">
+      <a href="index.html">الرئيسية</a>
+      <a href="page2-projects.html">المشاريع</a>
+      <a href="page6-developer.html" class="active">لوحة المطور</a>
+    </div>
+    <button class="btn btn-primary btn-sm">نشر مشروع جديد</button>
+  </div>
+</nav>
+
+<!-- Dev Header -->
+<div class="dev-header">
+  <div class="container">
+    <div class="dev-logo-wrap">
+      <div class="dev-logo-box"><img src="assets/images/OIP.jpeg"></div>
+      <div>
+        <div class="dev-name">شركة الإعمار للتطوير العقاري</div>
+        <div class="dev-meta">مطور عقاري معتمد · خبرة 15 عاماً · الرياض، المملكة العربية السعودية</div>
+      </div>
+    </div>
+    <div class="dev-kpis">
+      <div class="dev-kpi"><div class="dev-kpi-val">3,200,000</div><div class="dev-kpi-lbl">إجمالي التمويل (ر.س)</div></div>
+      <div class="dev-kpi"><div class="dev-kpi-val">147</div><div class="dev-kpi-lbl">عدد المستثمرين</div></div>
+      <div class="dev-kpi"><div class="dev-kpi-val">24</div><div class="dev-kpi-lbl">مشاريع منجزة</div></div>
+      <div class="dev-kpi"><div class="dev-kpi-val">4.8 / 5</div><div class="dev-kpi-lbl">تقييم المنصة</div></div>
+    </div>
+  </div>
+</div>
+
+<section class="section-sm">
+  <div class="container">
+    <div class="grid-2">
+      <!-- Left Column -->
+      <div>
+        <!-- Active Project Stats -->
+        <div class="card">
+          <div class="card-title">📊 المشروع الحالي — أبراج الرقي التجاري</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
+            <div style="background:var(--bg);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--primary)">3,000,000</div><div style="font-size:11px;color:var(--text3)">حجم التمويل (ر.س)</div></div>
+            <div style="background:var(--bg);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--accent-dark)">73%</div><div style="font-size:11px;color:var(--text3)">نسبة التمويل</div></div>
+            <div style="background:var(--bg);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--gold)">147</div><div style="font-size:11px;color:var(--text3)">مستثمر</div></div>
+          </div>
+          <div style="margin-bottom:10px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span style="color:var(--text3)">التمويل المُجمَّع</span><strong>2,190,000 / 3,000,000 ر.س</strong></div>
+            <div class="prog-bar"><div class="prog-fill" style="width:73%"></div></div>
+          </div>
+          <div style="font-size:12px;color:var(--text3)">متبقي: <strong style="color:var(--text1)">810,000 ر.س</strong> &nbsp;·&nbsp; ينتهي التمويل: 30 يونيو 2025</div>
+        </div>
+
+        <!-- Post Update Form -->
+        <div class="card">
+          <div class="card-title">📣 إضافة تحديث للمستثمرين</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div>
+              <div class="field-lbl">عنوان التحديث</div>
+              <input type="text" class="field-input" placeholder="مثال: اكتمال الطابق العاشر">
+            </div>
+            <div>
+              <div class="field-lbl">تفاصيل التحديث</div>
+              <textarea class="field-input" rows="4" placeholder="اكتب تفاصيل التحديث للمستثمرين..."></textarea>
+            </div>
+            <div>
+              <div class="field-lbl">المرحلة</div>
+              <select class="field-select">
+                <option>إعداد الموقع</option>
+                <option selected>الهيكل الإنشائي</option>
+                <option>التشطيبات</option>
+                <option>التسليم</option>
+              </select>
+            </div>
+            <div>
+              <div class="field-lbl">إرفاق صور (اختياري)</div>
+              <div style="border:2px dashed var(--border);border-radius:var(--r);padding:20px;text-align:center;color:var(--text3);font-size:13px;cursor:pointer;background:var(--bg)">📎 اسحب الصور هنا أو انقر للاختيار</div>
+            </div>
+            <button class="btn btn-primary" id="publishBtn" onclick="publishUpdate()">نشر التحديث ←</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div>
+        <!-- Investors Table -->
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:15px;font-weight:800">👥 أحدث المستثمرين</div>
+          <table>
+            <thead><tr><th>المستثمر</th><th>المبلغ</th><th>التاريخ</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:var(--primary)">أح</div>أحمد العلي</div></td>
+                <td style="font-weight:700">50,000 ر.س</td>
+                <td style="color:var(--text3);font-size:12px">15 أبريل</td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:var(--accent-dark)">سم</div>سمر الغامدي</div></td>
+                <td style="font-weight:700">100,000 ر.س</td>
+                <td style="color:var(--text3);font-size:12px">12 أبريل</td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:var(--gold)">فه</div>فهد المنصور</div></td>
+                <td style="font-weight:700">75,000 ر.س</td>
+                <td style="color:var(--text3);font-size:12px">10 أبريل</td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:#c0392b">نو</div>نورة القحطاني</div></td>
+                <td style="font-weight:700">25,000 ر.س</td>
+                <td style="color:var(--text3);font-size:12px">08 أبريل</td>
+              </tr>
+              <tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="background:#8e44ad">كا</div>كاملة السبيعي</div></td>
+                <td style="font-weight:700">150,000 ر.س</td>
+                <td style="color:var(--text3);font-size:12px">05 أبريل</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Developer Info -->
+        <div class="card">
+          <div class="card-title">🏢 معلومات الشركة</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">تأسست</span><span style="font-size:13px;font-weight:700">2010</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">التخصص</span><span style="font-size:13px;font-weight:700">تطوير تجاري وسكني</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">المدن</span><span style="font-size:13px;font-weight:700">الرياض، جدة، الدمام</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">المشاريع المنتهية</span><span style="font-size:13px;font-weight:700">24 مشروعاً</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">متوسط التأخر</span><span style="font-size:13px;font-weight:700;color:var(--accent-dark)">0 أيام</span></div>
+          </div>
+          <div style="background:var(--bg);border-radius:8px;padding:12px">
+            <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">الشهادات والتراخيص</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="badge badge-green">✓ مرخص هيئة الاستثمار</span>
+              <span class="badge badge-blue">✓ عضو اتحاد المطورين</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <button class="btn btn-ghost btn-sm" style="flex:1">تعديل الملف</button>
+            <button class="btn btn-ghost btn-sm" style="flex:1">تقارير المشاريع</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function publishUpdate(){
+  const btn=document.getElementById('publishBtn');
+  btn.textContent='✓ تم إرسال التحديث للمستثمرين';
+  btn.style.background='var(--accent-dark)';
+  btn.style.cursor='default';
+  setTimeout(()=>{
+    btn.textContent='نشر تحديث جديد ←';
+    btn.style.background='';
+    btn.style.cursor='pointer';
+  },3000);
+}
+</script>
+</body>
+</html>

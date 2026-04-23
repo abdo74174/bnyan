@@ -125,6 +125,104 @@
       align-items: center
     }
 
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px;
+      z-index: 310;
+      position: relative;
+    }
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2.5px;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: all .3s ease;
+    }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* ── MOBILE MENU ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 280px;
+      height: 100vh;
+      background: var(--white);
+      z-index: 300;
+      padding: 80px 24px 32px;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: -4px 0 30px rgba(0,0,0,.12);
+      transform: translateX(100%);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+      overflow-y: auto;
+    }
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    .mobile-menu a {
+      display: block;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text2);
+      text-decoration: none;
+      transition: all .18s;
+    }
+    .mobile-menu a:hover,
+    .mobile-menu a.active {
+      background: var(--bg);
+      color: var(--primary);
+    }
+    .mobile-menu .mobile-menu-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 12px 0;
+    }
+    .mobile-menu .mobile-menu-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .mobile-menu .mobile-menu-actions .btn {
+      width: 100%;
+      justify-content: center;
+      text-decoration: none;
+    }
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 31, 53, .4);
+      z-index: 290;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+    .mobile-overlay.open {
+      opacity: 1;
+    }
+
     /* ── BUTTONS ── */
     .btn {
       display: inline-flex;
@@ -742,6 +840,10 @@
 }
 @media(max-width:900px){
   .nav-links{display:none !important}
+  .nav-actions{display:none !important}
+  .hamburger{display:flex}
+  .mobile-menu{display:flex}
+  .mobile-overlay{display:block}
   .hero-inner{grid-template-columns:1fr;padding-top:40px}
   .hero-card{display:block;max-width:480px;margin:32px auto 0}
   .hero-title{font-size:32px;text-align:center}
@@ -751,6 +853,7 @@
   .grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
+  .section-header{flex-direction:column !important;align-items:flex-start !important;gap:16px}
 }
 @media(max-width:640px){
   .grid-3,.grid-4{grid-template-columns:1fr}
@@ -759,16 +862,24 @@
   .hero-title{font-size:26px}
   .section-title{font-size:24px}
   .section{padding:48px 0}
+  .hero{padding:64px 0 56px}
   .hero-kpi-row{grid-template-columns:1fr 1fr}
   .nav-logo{font-size:18px}
   .nav-logo-icon{width:32px;height:32px}
   .btn-sm{padding:6px 12px;font-size:12px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .footer-legal{justify-content:center}
+  .stat-val{font-size:24px}
+  .stat-item{padding:12px 10px;border-left:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  .stat-item:last-child{border-bottom:none}
 }
 @media(max-width:400px){
   .hero-title{font-size:22px}
   .section-title{font-size:20px}
   .hero-actions{flex-direction:column;width:100%}
   .hero-actions .btn{width:100%}
+  .container{padding:0 16px}
+  .hero-kpi-val{font-size:20px}
 }
     /* ── FAQ SECTION ── */
     .faq-section {
@@ -1011,8 +1122,25 @@
         <a href="page5-dashboard.html" class="btn btn-ghost btn-sm">تسجيل الدخول</a>
         <a href="page2-projects.html" class="btn btn-primary btn-sm">ابدأ الاستثمار</a>
       </div>
+      <button class="hamburger" id="hamburgerBtn" aria-label="القائمة" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMenu()"></div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="active">الرئيسية</a>
+    <a href="page2-projects.html">المشاريع</a>
+    <a href="page6-developer.html">للمطورين</a>
+    <a href="#how-section" onclick="toggleMenu()">كيف يعمل</a>
+    <div class="mobile-menu-divider"></div>
+    <div class="mobile-menu-actions">
+      <a href="page5-dashboard.html" class="btn btn-ghost">تسجيل الدخول</a>
+      <a href="page2-projects.html" class="btn btn-primary">ابدأ الاستثمار</a>
+    </div>
+  </div>
 
   <!-- HERO -->
   <section class="hero">

@@ -57,8 +57,13 @@ body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text1);font
 .success-overlay.show{display:flex}
 .success-modal{background:#fff;border-radius:var(--r-xl);padding:48px 40px;max-width:440px;width:90%;text-align:center;animation:popIn .3s ease}
 @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
-@media(max-width:900px){.two-col{grid-template-columns:1fr}.invest-wrap{padding:0 12px}}
-@media(max-width:640px){.amount-field{font-size:24px}.nav-links{display:none}.section-title{font-size:24px}}
+@media(max-width:900px){.nav-links{display:none}.two-col{grid-template-columns:1fr}.invest-wrap{padding:0 12px}}
+@media(max-width:640px){
+  .amount-field{font-size:24px}
+  .section-title{font-size:24px}
+  .nav-logo{font-size:18px}
+  .nav-logo-icon{width:32px;height:32px}
+}
 </style>
 </head>
 <body>

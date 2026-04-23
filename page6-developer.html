@@ -126,12 +126,12 @@ tbody td{padding:12px 14px;font-size:14px;vertical-align:middle}
 </nav>
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMenu()"></div>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="index.html">الرئيسية</a>
-  <a href="page2-projects.html">المشاريع</a>
-  <a href="page6-developer.html" class="active">لوحة المطور</a>
+  <a href="index.html" onclick="toggleMenu()">الرئيسية</a>
+  <a href="page2-projects.html" onclick="toggleMenu()">المشاريع</a>
+  <a href="page6-developer.html" class="active" onclick="toggleMenu()">لوحة المطور</a>
   <div class="mobile-menu-divider"></div>
   <div class="mobile-menu-actions">
-    <button class="btn btn-primary">نشر مشروع جديد</button>
+    <button class="btn btn-primary" onclick="toggleMenu()">نشر مشروع جديد</button>
   </div>
 </div>
 

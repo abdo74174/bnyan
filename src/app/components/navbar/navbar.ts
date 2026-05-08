@@ -35,14 +35,14 @@ import { filter } from 'rxjs/operators';
     <!-- Mobile Menu -->
     <div class="mobile-overlay" [class.open]="isMenuOpen" (click)="closeMenu()"></div>
     <div class="mobile-menu" [class.open]="isMenuOpen">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">الرئيسية</a>
-      <a routerLink="/projects" routerLinkActive="active">المشاريع</a>
-      <a routerLink="/developer" routerLinkActive="active">للمطورين</a>
-      <a routerLink="/" fragment="how-section">كيف يعمل</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">الرئيسية</a>
+      <a routerLink="/projects" routerLinkActive="active" (click)="closeMenu()">المشاريع</a>
+      <a routerLink="/developer" routerLinkActive="active" (click)="closeMenu()">للمطورين</a>
+      <a routerLink="/" fragment="how-section" (click)="closeMenu()">كيف يعمل</a>
       <div class="mobile-menu-divider"></div>
       <div class="mobile-menu-actions">
-        <a routerLink="/login" class="btn btn-ghost">تسجيل الدخول</a>
-        <a routerLink="/projects" class="btn btn-primary">ابدأ الاستثمار</a>
+        <a routerLink="/login" class="btn btn-ghost" (click)="closeMenu()">تسجيل الدخول</a>
+        <a routerLink="/projects" class="btn btn-primary" (click)="closeMenu()">ابدأ الاستثمار</a>
       </div>
     </div>
   `,

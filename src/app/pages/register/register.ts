@@ -172,7 +172,7 @@ export class RegisterComponent {
     setTimeout(() => {
       const result = this.auth.register(this.form.value);
       if (result.success) {
-        this.router.navigate(['/onboarding']);
+        this.router.navigate(['/kyc']);
       } else {
         this.errorMsg = result.message;
       }

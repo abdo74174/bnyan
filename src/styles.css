@@ -210,14 +210,21 @@ a {
 .mobile-menu .mobile-menu-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
-.mobile-menu .mobile-menu-actions .btn {
+.mobile-menu .mobile-menu-actions .btn-primary {
+  color: #ffffff !important;
+  background: var(--primary) !important;
   width: 100%;
-  justify-content: center;
-  text-decoration: none;
+}
+
+.mobile-menu .mobile-menu-actions .btn-ghost {
+  color: var(--text2) !important;
+  background: #f8fafc !important;
+  border: 1.5px solid var(--border) !important;
+  width: 100%;
 }
 
 .mobile-overlay {

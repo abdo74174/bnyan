@@ -21,7 +21,7 @@ import { AuthService } from '../../services/auth.service';
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">الرئيسية</a>
           <a routerLink="/projects" routerLinkActive="active">المشاريع</a>
           <a routerLink="/developer" routerLinkActive="active">للمطورين</a>
-          <a routerLink="/" fragment="how-section">كيف يعمل</a>
+          <a (click)="scrollToSection('how-section')" style="cursor: pointer;">كيف يعمل</a>
         </div>
         <div class="nav-actions">
           <ng-container *ngIf="!(auth.currentUser$ | async)">
@@ -46,7 +46,7 @@ import { AuthService } from '../../services/auth.service';
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">الرئيسية</a>
       <a routerLink="/projects" routerLinkActive="active" (click)="closeMenu()">المشاريع</a>
       <a routerLink="/developer" routerLinkActive="active" (click)="closeMenu()">للمطورين</a>
-      <a routerLink="/" fragment="how-section" (click)="closeMenu()">كيف يعمل</a>
+      <a (click)="scrollToSection('how-section')" style="cursor: pointer;">كيف يعمل</a>
       <div class="mobile-menu-divider"></div>
       <div class="mobile-menu-actions">
         <ng-container *ngIf="!(auth.currentUser$ | async)">
@@ -94,5 +94,17 @@ export class NavbarComponent {
   closeMenu() {
     this.isMenuOpen = false;
     document.body.style.overflow = '';
+  }
+
+  scrollToSection(sectionId: string) {
+    this.closeMenu();
+    if (this.router.url === '/' || this.router.url.startsWith('/#') || this.router.url === '/home') {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      this.router.navigate(['/'], { fragment: sectionId });
+    }
   }
 }

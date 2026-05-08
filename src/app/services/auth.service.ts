@@ -39,7 +39,39 @@ export class AuthService {
   }
 
   private getUsers(): User[] {
-    return this.storage.get(this.USERS_KEY) || [];
+    const users = this.storage.get(this.USERS_KEY) || [];
+    // Inject demo users if not present
+    if (users.length === 0) {
+      const demoUsers: User[] = [
+        {
+          id: 'demo_investor',
+          fullName: 'مستثمر تجريبي',
+          nationalId: '1234567890',
+          phone: '0500000001',
+          email: 'investor@bnyan.com',
+          password: 'password',
+          userType: 'investor',
+          kycStatus: 'approved',
+          onboardingDone: true,
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: 'demo_developer',
+          fullName: 'مطور تجريبي',
+          nationalId: '0987654321',
+          phone: '0500000002',
+          email: 'developer@bnyan.com',
+          password: 'password',
+          userType: 'developer',
+          kycStatus: 'approved',
+          onboardingDone: true,
+          createdAt: new Date().toISOString()
+        }
+      ];
+      this.saveUsers(demoUsers);
+      return demoUsers;
+    }
+    return users;
   }
 
   private saveUsers(users: User[]): void {
@@ -99,6 +131,15 @@ export class AuthService {
     const user = users.find(
       (u: User) => (u.email === emailOrPhone || u.phone === emailOrPhone) && u.password === password
     );
+
+    // Also support quick login with 'admin' or 'demo'
+    if (!user && emailOrPhone === 'admin' && password === 'admin') {
+      const adminUser = users.find(u => u.id === 'demo_investor');
+      if (adminUser) {
+        this.setSession(adminUser);
+        return { success: true, message: 'تم تسجيل الدخول كمستثمر تجريبي' };
+      }
+    }
 
     if (!user) {
       return { success: false, message: 'بيانات الدخول غير صحيحة' };

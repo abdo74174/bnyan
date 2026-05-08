@@ -24,8 +24,7 @@ import { CommonModule } from '@angular/common';
             وموثوق، وكل ريال تستثمره بإشراف كامل وشفافية مطلقة.</p>
           <div class="hero-actions">
             <a routerLink="/projects" class="btn btn-accent btn-lg">استعرض المشاريع ←</a>
-            <button class="btn btn-lg" style="color:#fff;background:transparent;border:2px solid rgba(255,255,255,.3)"
-              (click)="scrollToHow()">كيف يعمل؟</button>
+            <a routerLink="/" fragment="how-section" class="btn btn-lg" style="color:#fff;background:transparent;border:2px solid rgba(255,255,255,.3);text-decoration:none;display:inline-flex;align-items:center;justify-content:center">كيف يعمل؟</a>
           </div>
           <p class="hero-note">✓ مرخصة ومنظمة &nbsp;·&nbsp; ✓ حساب ضماني &nbsp;·&nbsp; ✓ تقارير شهرية</p>
         </div>
@@ -454,8 +453,4 @@ export class HomeComponent {
     { id: '12', question: 'كيف تستفيد كمستثمر من هذه الفجوة؟', answer: 'تتيح هذه الفجوة فرص استثمارية بعوائد أعلى نسبياً ودخول مبكر في مشاريع واعدة لم تحصل على تمويل كافٍ من القنوات التقليدية، مع حماية عالية عبر رهن الأرض، الصرف المرحلي، التحقق قبل الصرف.', icon: 'star', iconColor: 'var(--accent-dark)' }
   ];
 
-  scrollToHow() {
-    const el = document.getElementById('how-section');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }
 }

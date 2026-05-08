@@ -92,6 +92,24 @@ import { AuthService } from '../../services/auth.service';
                 <span>.</span><span>.</span><span>.</span>
               </div>
             </button>
+
+            <!-- Saudi Permits & Authorities -->
+            <div class="permits-footer" style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; display: flex; justify-content: space-around; align-items: center; opacity: 0.8;">
+              <div class="permit-item" style="text-align: center;">
+                <div style="font-size: 10px; color: #6b82a0; margin-bottom: 4px;">مرخص من</div>
+                <div style="font-weight: 700; color: #1a4f8a; font-size: 12px;">هيئة السوق المالية</div>
+              </div>
+              <div style="width: 1px; height: 30px; background: #eee;"></div>
+              <div class="permit-item" style="text-align: center;">
+                <div style="font-size: 10px; color: #6b82a0; margin-bottom: 4px;">متصل عبر</div>
+                <div style="font-weight: 700; color: #1a4f8a; font-size: 12px;">نفاذ الوطني</div>
+              </div>
+              <div style="width: 1px; height: 30px; background: #eee;"></div>
+              <div class="permit-item" style="text-align: center;">
+                <div style="font-size: 10px; color: #6b82a0; margin-bottom: 4px;">مطابق لمعايير</div>
+                <div style="font-weight: 700; color: #1a4f8a; font-size: 12px;">البنك المركزي (SAMA)</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -349,12 +367,22 @@ export class KycComponent {
       'assets/images/OIP (3).jpeg'
     ];
 
+    // First, make all boxes show the loading spinner
+    for (const type of types) {
+      if (!this.files[type]) {
+        this.isLoading[type] = true;
+      }
+    }
+
+    // Then fill them one by one with a tiny delay
     for (let i = 0; i < types.length; i++) {
       const type = types[i];
-      if (this.files[type]) continue;
+      if (this.files[type] && this.files[type] !== '') {
+        this.isLoading[type] = false;
+        continue;
+      }
       
-      this.isLoading[type] = true;
-      await new Promise(resolve => setTimeout(resolve, 10)); // Ultra-fast fill
+      await new Promise(resolve => setTimeout(resolve, 200)); // Visible loading for each
       this.files[type] = images[i];
       this.isLoading[type] = false;
     }

@@ -354,14 +354,14 @@ export class KycComponent {
       if (this.files[type]) continue;
       
       this.isLoading[type] = true;
-      await new Promise(resolve => setTimeout(resolve, 300)); // Snappier staggered upload
+      await new Promise(resolve => setTimeout(resolve, 10)); // Ultra-fast fill
       this.files[type] = images[i];
       this.isLoading[type] = false;
     }
 
-    // Auto-trigger submission for a true one-click demo
+    // Auto-trigger submission instantly
     if (this.canSubmit()) {
-      setTimeout(() => this.submit(), 500);
+      setTimeout(() => this.submit(), 10);
     }
   }
 

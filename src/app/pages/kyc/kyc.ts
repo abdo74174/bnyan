@@ -354,7 +354,7 @@ export class KycComponent {
       if (this.files[type]) continue;
       
       this.isLoading[type] = true;
-      await new Promise(resolve => setTimeout(resolve, 800)); // Staggered upload feel
+      await new Promise(resolve => setTimeout(resolve, 300)); // Snappier staggered upload
       this.files[type] = images[i];
       this.isLoading[type] = false;
     }

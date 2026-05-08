@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -32,16 +32,16 @@ import { CommonModule } from '@angular/common';
     </nav>
 
     <!-- Mobile Menu -->
-    <div class="mobile-overlay" [class.open]="isMenuOpen" (click)="toggleMenu()"></div>
+    <div class="mobile-overlay" [class.open]="isMenuOpen" (click)="closeMenu()"></div>
     <div class="mobile-menu" [class.open]="isMenuOpen">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="toggleMenu()">الرئيسية</a>
-      <a routerLink="/projects" routerLinkActive="active" (click)="toggleMenu()">المشاريع</a>
-      <a routerLink="/developer" routerLinkActive="active" (click)="toggleMenu()">للمطورين</a>
-      <a routerLink="/" fragment="how-section" (click)="toggleMenu()">كيف يعمل</a>
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">الرئيسية</a>
+      <a routerLink="/projects" routerLinkActive="active">المشاريع</a>
+      <a routerLink="/developer" routerLinkActive="active">للمطورين</a>
+      <a routerLink="/" fragment="how-section">كيف يعمل</a>
       <div class="mobile-menu-divider"></div>
       <div class="mobile-menu-actions">
-        <a routerLink="/login" class="btn btn-ghost" (click)="toggleMenu()">تسجيل الدخول</a>
-        <a routerLink="/projects" class="btn btn-primary" (click)="toggleMenu()">ابدأ الاستثمار</a>
+        <a routerLink="/login" class="btn btn-ghost">تسجيل الدخول</a>
+        <a routerLink="/projects" class="btn btn-primary">ابدأ الاستثمار</a>
       </div>
     </div>
   `,
@@ -52,14 +52,26 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent {
   isMenuOpen = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    // Automatically close menu on navigation
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.closeMenu();
+    });
+  }
 
   toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-    if (this.isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    this.isMenuOpen ? this.closeMenu() : this.openMenu();
+  }
+
+  openMenu() {
+    this.isMenuOpen = true;
+    document.body.style.overflow = 'hidden';
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false;
+    document.body.style.overflow = '';
   }
 }

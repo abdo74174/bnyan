@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,8 +24,15 @@ import { filter } from 'rxjs/operators';
           <a routerLink="/" fragment="how-section">كيف يعمل</a>
         </div>
         <div class="nav-actions">
-          <a routerLink="/login" class="btn btn-ghost btn-sm">تسجيل الدخول</a>
-          <a routerLink="/projects" class="btn btn-primary btn-sm">ابدأ الاستثمار</a>
+          <ng-container *ngIf="!(auth.currentUser$ | async)">
+            <a routerLink="/login" class="btn btn-ghost btn-sm">تسجيل الدخول</a>
+            <a routerLink="/projects" class="btn btn-primary btn-sm">ابدأ الاستثمار</a>
+          </ng-container>
+          <ng-container *ngIf="auth.currentUser$ | async as user">
+            <span class="nav-user-name" style="font-size: 13px; font-weight: 600; color: var(--text2); margin-left: 10px;">أهلاً، {{user.fullName.split(' ')[0]}}</span>
+            <a [routerLink]="user.userType === 'developer' ? '/developer' : '/dashboard'" class="btn btn-ghost btn-sm">حسابي</a>
+            <button (click)="logout()" class="btn btn-outline btn-sm">خروج</button>
+          </ng-container>
         </div>
         <button class="hamburger" [class.active]="isMenuOpen" (click)="toggleMenu()" aria-label="القائمة">
           <span></span><span></span><span></span>
@@ -41,8 +49,15 @@ import { filter } from 'rxjs/operators';
       <a routerLink="/" fragment="how-section" (click)="closeMenu()">كيف يعمل</a>
       <div class="mobile-menu-divider"></div>
       <div class="mobile-menu-actions">
-        <a routerLink="/login" class="btn btn-ghost" (click)="closeMenu()">تسجيل الدخول</a>
-        <a routerLink="/projects" class="btn btn-primary" (click)="closeMenu()">ابدأ الاستثمار</a>
+        <ng-container *ngIf="!(auth.currentUser$ | async)">
+          <a routerLink="/login" class="btn btn-ghost" (click)="closeMenu()">تسجيل الدخول</a>
+          <a routerLink="/projects" class="btn btn-primary" (click)="closeMenu()">ابدأ الاستثمار</a>
+        </ng-container>
+        <ng-container *ngIf="auth.currentUser$ | async as user">
+          <div style="padding: 0 16px 12px; font-weight: 700; color: var(--primary);">أهلاً، {{user.fullName}}</div>
+          <a [routerLink]="user.userType === 'developer' ? '/developer' : '/dashboard'" class="btn btn-ghost" (click)="closeMenu()">لوحة التحكم</a>
+          <button (click)="logout()" class="btn btn-outline" style="width:100%">تسجيل الخروج</button>
+        </ng-container>
       </div>
     </div>
   `,
@@ -53,13 +68,18 @@ import { filter } from 'rxjs/operators';
 export class NavbarComponent {
   isMenuOpen = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, public auth: AuthService) {
     // Automatically close menu on navigation
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.closeMenu();
     });
+  }
+
+  logout() {
+    this.auth.logout();
+    this.closeMenu();
   }
 
   toggleMenu() {

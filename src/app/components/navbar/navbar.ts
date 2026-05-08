@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">الرئيسية</a>
           <a routerLink="/projects" routerLinkActive="active">المشاريع</a>
           <a routerLink="/developer" routerLinkActive="active">للمطورين</a>
-          <a href="#how-section">كيف يعمل</a>
+          <a routerLink="/" fragment="how-section">كيف يعمل</a>
         </div>
         <div class="nav-actions">
           <a routerLink="/dashboard" class="btn btn-ghost btn-sm">تسجيل الدخول</a>
@@ -37,7 +37,7 @@ import { CommonModule } from '@angular/common';
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="toggleMenu()">الرئيسية</a>
       <a routerLink="/projects" routerLinkActive="active" (click)="toggleMenu()">المشاريع</a>
       <a routerLink="/developer" routerLinkActive="active" (click)="toggleMenu()">للمطورين</a>
-      <a href="#how-section" (click)="toggleMenu()">كيف يعمل</a>
+      <a routerLink="/" fragment="how-section" (click)="toggleMenu()">كيف يعمل</a>
       <div class="mobile-menu-divider"></div>
       <div class="mobile-menu-actions">
         <a routerLink="/dashboard" class="btn btn-ghost" (click)="toggleMenu()">تسجيل الدخول</a>
@@ -51,6 +51,8 @@ import { CommonModule } from '@angular/common';
 })
 export class NavbarComponent {
   isMenuOpen = false;
+
+  constructor(private router: Router) {}
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;

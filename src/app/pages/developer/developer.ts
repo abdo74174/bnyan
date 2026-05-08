@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-developer',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [CommonModule],
   template: `
     <!-- Dev Header -->
     <div class="dev-header">

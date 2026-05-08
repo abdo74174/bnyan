@@ -253,7 +253,7 @@ import { CommonModule } from '@angular/common';
       color: var(--text1);
     }
 
-    .card-body { padding: 24px; }
+    .card-body { padding: 30px; }
     .no-padding { padding: 0 !important; }
     .overflow-hidden { overflow: hidden; }
 
@@ -338,7 +338,7 @@ import { CommonModule } from '@angular/common';
     /* Tables */
     .modern-table { width: 100%; border-collapse: collapse; }
     .modern-table th {
-      padding: 14px 24px;
+      padding: 18px 24px;
       background: #fcfcfc;
       font-size: 12px;
       font-weight: 700;
@@ -346,11 +346,11 @@ import { CommonModule } from '@angular/common';
       text-transform: uppercase;
       border-bottom: 1px solid #f0f0f0;
     }
-    .modern-table td { padding: 16px 24px; border-bottom: 1px solid #f9f9f9; font-size: 14px; vertical-align: middle; }
+    .modern-table td { padding: 18px 24px; border-bottom: 1px solid #f9f9f9; font-size: 14px; vertical-align: middle; }
     
-    .text-right { text-align: right; }
-    .text-left { text-align: left; }
-    .text-center { text-align: center; }
+    .text-right { text-align: right !important; }
+    .text-left { text-align: left !important; }
+    .text-center { text-align: center !important; }
 
     .user-cell { display: flex; align-items: center; gap: 12px; }
     .avatar-sm {
@@ -368,26 +368,53 @@ import { CommonModule } from '@angular/common';
     .date { color: var(--text3); }
 
     /* Info List Compact */
-    .info-list-compact { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
-    .info-row { display: flex; justify-content: space-between; align-items: center; }
+    .info-list-compact { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .info-row { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f8fafc;
+    }
+    .info-row:last-child { border-bottom: none; }
     .info-label { font-size: 14px; color: var(--text3); font-weight: 600; }
     .info-value { font-size: 14px; font-weight: 800; color: var(--text1); text-align: left; }
-    .info-value.highlight { color: #27ae60; }
+    .info-value.highlight { color: #27ae60; background: #e8f8f0; padding: 2px 8px; border-radius: 6px; }
 
     /* Forms */
-    .form-grid { display: flex; flex-direction: column; gap: 20px; }
-    .field-lbl { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: var(--text2); }
-    .upload-dropzone {
-      border: 2px dashed #ddd;
+    .form-grid { display: flex; flex-direction: column; gap: 24px; }
+    .field-lbl { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; color: var(--text2); }
+    .field-input, .field-select {
+      width: 100%;
+      padding: 12px 16px;
       border-radius: 12px;
-      padding: 30px;
-      text-align: center;
-      background: #fafafa;
-      cursor: pointer;
+      border: 1.5px solid #eef2f6;
+      background: #fcfdfe;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text1);
       transition: all 0.2s;
     }
-    .upload-dropzone:hover { border-color: var(--primary); background: white; }
-    .upload-dropzone .icon { display: block; font-size: 30px; margin-bottom: 10px; }
+    .field-input:focus, .field-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(26, 79, 138, 0.05);
+    }
+    textarea.field-input { line-height: 1.6; resize: vertical; }
+
+    .upload-dropzone {
+      border: 2px dashed #eef2f6;
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      background: #fcfdfe;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text3);
+    }
+    .upload-dropzone:hover { border-color: var(--primary); background: white; color: var(--primary); }
+    .upload-dropzone .icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
 
     .certifications-box {
       background: #f8fafc;

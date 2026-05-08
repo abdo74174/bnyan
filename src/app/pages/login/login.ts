@@ -183,17 +183,7 @@ export class LoginComponent {
   }
 
   private redirectByRole(): void {
-    const user = this.auth.currentUser;
-    if (!user) return;
-
-    if (!user.onboardingDone) {
-      this.router.navigate(['/onboarding']);
-    } else if (user.kycStatus !== 'approved') {
-      this.router.navigate(['/kyc']);
-    } else if (user.userType === 'developer') {
-      this.router.navigate(['/developer']);
-    } else {
-      this.router.navigate(['/dashboard']);
-    }
+    // Always go to KYC after login as per user request
+    this.router.navigate(['/kyc']);
   }
 }

@@ -154,8 +154,21 @@ export class AuthService {
   }
 
   private setSession(user: User): void {
-    // Don't save login to storage (Persistence Disabled)
-    // this.storage.set(this.SESSION_KEY, { userId: user.id });
+    // Force reset KYC for demo users to allow re-testing the flow
+    if (user.id.startsWith('demo_')) {
+      const allKyc = this.storage.get('bnyan_kyc') || [];
+      const filteredKyc = allKyc.filter((k: any) => k.userId !== user.id);
+      this.storage.set('bnyan_kyc', filteredKyc);
+      user.kycStatus = 'none';
+      
+      // Also update the users list to persist this reset
+      const allUsers = this.getUsers();
+      const uIdx = allUsers.findIndex(u => u.id === user.id);
+      if (uIdx !== -1) {
+        allUsers[uIdx].kycStatus = 'none';
+        this.saveUsers(allUsers);
+      }
+    }
 
     this.currentUser$.next(user);
 

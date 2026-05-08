@@ -87,6 +87,7 @@ export class KycService {
     all[idx].reviewedAt = new Date().toISOString();
     this.saveAllKyc(all);
 
+    const currentUser = this.auth.currentUser;
     if (currentUser && currentUser.id === userId) {
       this.auth.updateUser({ kycStatus: 'approved' });
       this.kycStatus$.next('approved');

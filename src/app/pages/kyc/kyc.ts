@@ -358,11 +358,6 @@ export class KycComponent {
       this.files[type] = images[i];
       this.isLoading[type] = false;
     }
-
-    // Auto-trigger submission instantly
-    if (this.canSubmit()) {
-      setTimeout(() => this.submit(), 10);
-    }
   }
 
   canSubmit() {

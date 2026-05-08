@@ -31,7 +31,7 @@ import { RouterLink } from '@angular/router';
           <div>
             <div class="footer-col-ttl">المستثمر</div>
             <div class="footer-links">
-              <a routerLink="/dashboard">لوحة التحكم</a>
+              <a routerLink="/login">لوحة التحكم</a>
               <a routerLink="/" fragment="faq-section">سؤال وجواب</a>
               <a>الدعم</a>
             </div>

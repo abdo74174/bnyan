@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
           <a routerLink="/" fragment="how-section">كيف يعمل</a>
         </div>
         <div class="nav-actions">
-          <a routerLink="/dashboard" class="btn btn-ghost btn-sm">تسجيل الدخول</a>
+          <a routerLink="/login" class="btn btn-ghost btn-sm">تسجيل الدخول</a>
           <a routerLink="/projects" class="btn btn-primary btn-sm">ابدأ الاستثمار</a>
         </div>
         <button class="hamburger" [class.active]="isMenuOpen" (click)="toggleMenu()" aria-label="القائمة">
@@ -40,7 +40,7 @@ import { CommonModule } from '@angular/common';
       <a routerLink="/" fragment="how-section" (click)="toggleMenu()">كيف يعمل</a>
       <div class="mobile-menu-divider"></div>
       <div class="mobile-menu-actions">
-        <a routerLink="/dashboard" class="btn btn-ghost" (click)="toggleMenu()">تسجيل الدخول</a>
+        <a routerLink="/login" class="btn btn-ghost" (click)="toggleMenu()">تسجيل الدخول</a>
         <a routerLink="/projects" class="btn btn-primary" (click)="toggleMenu()">ابدأ الاستثمار</a>
       </div>
     </div>

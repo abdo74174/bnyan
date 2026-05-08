@@ -165,15 +165,9 @@ export class AuthService {
     // Save session to storage
     this.storage.set(this.SESSION_KEY, { userId: user.id });
     this.currentUser$.next(user);
-
-    if (this.logoutTimer) {
-      clearTimeout(this.logoutTimer);
-      this.logoutTimer = null;
-    }
   }
 
   logout(): void {
-    if (this.logoutTimer) clearTimeout(this.logoutTimer);
     this.storage.remove(this.SESSION_KEY);
     this.currentUser$.next(null);
     this.router.navigate(['/login']);

@@ -350,7 +350,7 @@ export class KycComponent {
 
   upload(type: string) {
     if (this.isLoading[type]) return;
-    
+
     this.isLoading[type] = true;
     // Simulate file upload
     setTimeout(() => {
@@ -381,7 +381,7 @@ export class KycComponent {
         this.isLoading[type] = false;
         continue;
       }
-      
+
       await new Promise(resolve => setTimeout(resolve, 200)); // Visible loading for each
       this.files[type] = images[i];
       this.isLoading[type] = false;
@@ -394,7 +394,7 @@ export class KycComponent {
 
   submit() {
     this.isSubmitting = true;
-    
+
     // Aesthetic delay for the "wow" factor
     setTimeout(() => {
       this.kyc.submitKyc(this.files.front, this.files.back, this.files.selfie);

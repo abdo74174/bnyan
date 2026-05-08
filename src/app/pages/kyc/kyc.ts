@@ -56,8 +56,9 @@ import { AuthService } from '../../services/auth.service';
               </div>
             </div>
 
-            <div class="kyc-compliance">
+            <div class="kyc-compliance" style="display:flex; justify-content:space-between; align-items:center;">
               <p>📍 ملاحظة: يجب أن تكون الصور واضحة وجميع البيانات مقروءة.</p>
+              <button (click)="quickFill()" class="btn btn-ghost btn-sm" style="font-size: 11px;">تعبئة سريعة (ديمو)</button>
             </div>
 
             <button (click)="submit()" class="btn btn-primary btn-lg" [disabled]="!canSubmit()" style="width: 100%; margin-top: 30px;">
@@ -88,6 +89,12 @@ export class KycComponent {
   upload(type: string) {
     // Simulate file upload
     this.files[type] = 'assets/images/placeholder.jpg';
+  }
+
+  quickFill() {
+    this.files.front = 'assets/images/OIP (1).jpeg';
+    this.files.back = 'assets/images/OIP (2).jpeg';
+    this.files.selfie = 'assets/images/OIP (3).jpeg';
   }
 
   canSubmit() {

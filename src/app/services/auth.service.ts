@@ -51,7 +51,7 @@ export class AuthService {
           email: 'investor@bnyan.com',
           password: 'password',
           userType: 'investor',
-          kycStatus: 'approved',
+          kycStatus: 'none', // Force KYC flow
           onboardingDone: true,
           createdAt: new Date().toISOString()
         },
@@ -63,7 +63,7 @@ export class AuthService {
           email: 'developer@bnyan.com',
           password: 'password',
           userType: 'developer',
-          kycStatus: 'approved',
+          kycStatus: 'none', // Force KYC flow
           onboardingDone: true,
           createdAt: new Date().toISOString()
         }

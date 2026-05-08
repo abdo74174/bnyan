@@ -114,6 +114,15 @@ import { AuthService } from '../../services/auth.service';
               <p>ليس لديك حساب؟ <a routerLink="/register" class="auth-link">إنشاء حساب جديد</a></p>
             </div>
 
+            <div class="auth-demo-box" style="margin-top: 24px; padding: 16px; background: #f0f7ff; border-radius: 12px; border: 1px dashed #1a4f8a;">
+              <p style="font-size: 13px; font-weight: 700; color: #1a4f8a; margin-bottom: 12px; text-align: center;">جرب النسخة التجريبية (ديمو)</p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button type="button" class="btn btn-ghost btn-sm" (click)="loginAsDemo('investor')" style="font-size: 11px; background: white;">👤 مستثمر</button>
+                <button type="button" class="btn btn-ghost btn-sm" (click)="loginAsDemo('developer')" style="font-size: 11px; background: white;">🏗️ مطور عقاري</button>
+              </div>
+              <p style="font-size: 10px; color: #6b82a0; margin-top: 8px; text-align: center;">أو استخدم: <b>admin</b> / <b>admin</b></p>
+            </div>
+
             <div class="auth-compliance">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               يتم حفظ البيانات وفق أعلى معايير الأمان والحوكمة المالية
@@ -162,6 +171,15 @@ export class LoginComponent {
       }
       this.loading = false;
     }, 800);
+  }
+
+  loginAsDemo(role: 'investor' | 'developer'): void {
+    const email = role === 'investor' ? 'investor@bnyan.com' : 'developer@bnyan.com';
+    this.form.patchValue({
+      emailOrPhone: email,
+      password: 'password'
+    });
+    this.onSubmit();
   }
 
   private redirectByRole(): void {

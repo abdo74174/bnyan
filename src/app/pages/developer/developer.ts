@@ -28,38 +28,57 @@ import { CommonModule } from '@angular/common';
 
     <section class="section-sm">
       <div class="container">
+    <section class="section-sm">
+      <div class="container">
         <div class="grid-2">
-          <!-- Left Column -->
-          <div>
+          <!-- Right Column (Desktop) / Top Column (Mobile) -->
+          <div class="dev-main-col">
             <!-- Active Project Stats -->
-            <div class="card">
+            <div class="card premium-card">
               <div class="card-title">📊 المشروع الحالي — أبراج الرقي التجاري</div>
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
-                <div style="background:var(--bg);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--primary)">3,000,000</div><div style="font-size:11px;color:var(--text3)">حجم التمويل (ر.س)</div></div>
-                <div style="background:var(--bg);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--accent-dark)">73%</div><div style="font-size:11px;color:var(--text3)">نسبة التمويل</div></div>
-                <div style="background:var(--bg);border-radius:8px;padding:12px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--gold)">147</div><div style="font-size:11px;color:var(--text3)">مستثمر</div></div>
+              <div class="stats-mini-grid">
+                <div class="stat-mini-card">
+                  <div class="stat-mini-val">3,000,000</div>
+                  <div class="stat-mini-lbl">حجم التمويل (ر.س)</div>
+                </div>
+                <div class="stat-mini-card stat-highlight">
+                  <div class="stat-mini-val">73%</div>
+                  <div class="stat-mini-lbl">نسبة التمويل</div>
+                </div>
+                <div class="stat-mini-card">
+                  <div class="stat-mini-val">147</div>
+                  <div class="stat-mini-lbl">مستثمر</div>
+                </div>
               </div>
-              <div style="margin-bottom:10px">
-                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span style="color:var(--text3)">التمويل المُجمَّع</span><strong>2,190,000 / 3,000,000 ر.س</strong></div>
-                <div class="prog-bar"><div class="prog-fill" style="width:73%"></div></div>
+              <div class="progress-section">
+                <div class="progress-labels">
+                  <span class="lbl-main">التمويل المُجمَّع</span>
+                  <span class="lbl-vals"><strong>2,190,000</strong> / 3,000,000 ر.س</span>
+                </div>
+                <div class="prog-bar-container">
+                  <div class="prog-bar"><div class="prog-fill" style="width:73%"></div></div>
+                </div>
+                <div class="progress-footer">
+                  <span>متبقي: <strong>810,000 ر.س</strong></span>
+                  <span>ينتهي التمويل: <strong>30 يونيو 2025</strong></span>
+                </div>
               </div>
-              <div style="font-size:12px;color:var(--text3)">متبقي: <strong style="color:var(--text1)">810,000 ر.س</strong> &nbsp;·&nbsp; ينتهي التمويل: 30 يونيو 2025</div>
             </div>
 
             <!-- Post Update Form -->
-            <div class="card">
+            <div class="card premium-card">
               <div class="card-title">📣 إضافة تحديث للمستثمرين</div>
-              <div style="display:flex;flex-direction:column;gap:14px">
-                <div>
-                  <div class="field-lbl">عنوان التحديث</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="field-lbl">عنوان التحديث</label>
                   <input type="text" class="field-input" placeholder="مثال: اكتمال الطابق العاشر">
                 </div>
-                <div>
-                  <div class="field-lbl">تفاصيل التحديث</div>
+                <div class="form-group">
+                  <label class="field-lbl">تفاصيل التحديث</label>
                   <textarea class="field-input" rows="4" placeholder="اكتب تفاصيل التحديث للمستثمرين..."></textarea>
                 </div>
-                <div>
-                  <div class="field-lbl">المرحلة</div>
+                <div class="form-group">
+                  <label class="field-lbl">المرحلة</label>
                   <select class="field-select">
                     <option>إعداد الموقع</option>
                     <option selected>الهيكل الإنشائي</option>
@@ -67,60 +86,98 @@ import { CommonModule } from '@angular/common';
                     <option>التسليم</option>
                   </select>
                 </div>
-                <div>
-                  <div class="field-lbl">إرفاق صور (اختياري)</div>
-                  <div style="border:2px dashed var(--border);border-radius:var(--r);padding:20px;text-align:center;color:var(--text3);font-size:13px;cursor:pointer;background:var(--bg)">📎 اسحب الصور هنا أو انقر للاختيار</div>
+                <div class="form-group">
+                  <label class="field-lbl">إرفاق صور (اختياري)</label>
+                  <div class="upload-dropzone">
+                    <span class="icon">📎</span>
+                    <span>اسحب الصور هنا أو انقر للاختيار</span>
+                  </div>
                 </div>
-                <button class="btn btn-primary" (click)="publishUpdate()" [style.background]="publishSuccess ? 'var(--accent-dark)' : ''" [style.cursor]="publishSuccess ? 'default' : 'pointer'">
+                <button class="btn btn-primary btn-lg" (click)="publishUpdate()" [class.success]="publishSuccess">
                   {{publishSuccess ? '✓ تم إرسال التحديث للمستثمرين' : 'نشر التحديث ←'}}
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Right Column -->
-          <div>
+          <!-- Side Column -->
+          <div class="dev-side-col">
             <!-- Investors Table -->
-            <div class="card" style="padding:0;overflow:hidden">
-              <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:15px;font-weight:800">👥 أحدث المستثمرين</div>
-              <table>
-                <thead><tr><th>المستثمر</th><th>المبلغ</th><th>التاريخ</th></tr></thead>
-                <tbody>
-                  @for (inv of latestInvestors; track inv.name) {
+            <div class="card premium-card no-padding">
+              <div class="card-header-simple">
+                <span class="icon">👥</span>
+                <span class="text">أحدث المستثمرين</span>
+              </div>
+              <div class="table-responsive">
+                <table class="modern-table">
+                  <thead>
                     <tr>
-                      <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" [style.background]="inv.avatarBg">{{inv.avatar}}</div>{{inv.name}}</div></td>
-                      <td style="font-weight:700">{{inv.amount | number}} ر.س</td>
-                      <td style="color:var(--text3);font-size:12px">{{inv.date}}</td>
+                      <th>المستثمر</th>
+                      <th>المبلغ</th>
+                      <th>التاريخ</th>
                     </tr>
-                  }
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    @for (inv of latestInvestors; track inv.name) {
+                      <tr>
+                        <td>
+                          <div class="user-cell">
+                            <div class="avatar-sm" [style.background]="inv.avatarBg">{{inv.avatar}}</div>
+                            <span class="name">{{inv.name}}</span>
+                          </div>
+                        </td>
+                        <td class="amount">{{inv.amount | number}} ر.س</td>
+                        <td class="date">{{inv.date}}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <!-- Developer Info -->
-            <div class="card">
+            <div class="card premium-card">
               <div class="card-title">🏢 معلومات الشركة</div>
-              <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
-                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">تأسست</span><span style="font-size:13px;font-weight:700">2010</span></div>
-                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">التخصص</span><span style="font-size:13px;font-weight:700">تطوير تجاري وسكني</span></div>
-                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">المدن</span><span style="font-size:13px;font-weight:700">الرياض، جدة، الدمام</span></div>
-                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">المشاريع المنتهية</span><span style="font-size:13px;font-weight:700">24 مشروعاً</span></div>
-                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:var(--text3)">متوسط التأخر</span><span style="font-size:13px;font-weight:700;color:var(--accent-dark)">0 أيام</span></div>
+              <div class="info-list">
+                <div class="info-item">
+                  <span class="info-label">تأسست</span>
+                  <span class="info-value">2010</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">التخصص</span>
+                  <span class="info-value">تطوير تجاري وسكني</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">المدن</span>
+                  <span class="info-value">الرياض، جدة، الدمام</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">المشاريع المنتهية</span>
+                  <span class="info-value">24 مشروعاً</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">متوسط التأخر</span>
+                  <span class="info-value highlight">0 أيام</span>
+                </div>
               </div>
-              <div style="background:var(--bg);border-radius:8px;padding:12px">
-                <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">الشهادات والتراخيص</div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap">
+
+              <div class="certifications-box">
+                <div class="box-title">الشهادات والتراخيص</div>
+                <div class="badge-row">
                   <span class="badge badge-green">✓ مرخص هيئة الاستثمار</span>
                   <span class="badge badge-blue">✓ عضو اتحاد المطورين</span>
                 </div>
               </div>
-              <div style="display:flex;gap:10px;margin-top:14px">
-                <button class="btn btn-ghost btn-sm" style="flex:1">تعديل الملف</button>
-                <button class="btn btn-ghost btn-sm" style="flex:1">تقارير المشاريع</button>
+
+              <div class="action-row">
+                <button class="btn btn-ghost">تعديل الملف</button>
+                <button class="btn btn-ghost">تقارير المشاريع</button>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
       </div>
     </section>
   `,

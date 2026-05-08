@@ -24,7 +24,7 @@ import { RouterLink } from '@angular/router';
             <div class="footer-col-ttl">المنصة</div>
             <div class="footer-links">
               <a routerLink="/projects">المشاريع</a>
-              <a href="#how-section">كيف يعمل</a>
+              <a routerLink="/" fragment="how-section">كيف يعمل</a>
               <a routerLink="/developer">للمطورين</a>
             </div>
           </div>
@@ -32,7 +32,7 @@ import { RouterLink } from '@angular/router';
             <div class="footer-col-ttl">المستثمر</div>
             <div class="footer-links">
               <a routerLink="/dashboard">لوحة التحكم</a>
-              <a href="#faq-section">سؤال وجواب</a>
+              <a routerLink="/" fragment="faq-section">سؤال وجواب</a>
               <a>الدعم</a>
             </div>
           </div>

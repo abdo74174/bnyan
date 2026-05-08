@@ -21,10 +21,15 @@ import { CommonModule } from '@angular/common';
           <div class="dev-kpi"><div class="dev-kpi-val">3,200,000</div><div class="dev-kpi-lbl">إجمالي التمويل (ر.س)</div></div>
           <div class="dev-kpi"><div class="dev-kpi-val">147</div><div class="dev-kpi-lbl">عدد المستثمرين</div></div>
           <div class="dev-kpi"><div class="dev-kpi-val">24</div><div class="dev-kpi-lbl">مشاريع منجزة</div></div>
-          <div class="dev-kpi"><div class    <section class="section-sm">
+          <div class="dev-kpi"><div class="dev-kpi-val">4.8 / 5</div><div class="dev-kpi-lbl">تقييم المنصة</div></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="section-sm">
       <div class="container">
         <div class="grid-2">
-          <!-- Right Column (Desktop) / Top Column (Mobile) -->
+          <!-- Main Column -->
           <div class="dev-main-col">
             <!-- Active Project Stats -->
             <div class="card premium-card">
@@ -80,7 +85,7 @@ import { CommonModule } from '@angular/common';
                   </select>
                 </div>
                 <div class="form-group">
-                  <label class="field-lbl">إرفاق صور (اختياري)</div>
+                  <label class="field-lbl">إرفاق صور (اختياري)</label>
                   <div class="upload-dropzone">
                     <span class="icon">📎</span>
                     <span>اسحب الصور هنا أو انقر للاختيار</span>
@@ -170,23 +175,6 @@ import { CommonModule } from '@angular/common';
           </div>
         </div>
       </div>
-    </section>           <div class="box-title">الشهادات والتراخيص</div>
-                <div class="badge-row">
-                  <span class="badge badge-green">✓ مرخص هيئة الاستثمار</span>
-                  <span class="badge badge-blue">✓ عضو اتحاد المطورين</span>
-                </div>
-              </div>
-
-              <div class="action-row">
-                <button class="btn btn-ghost">تعديل الملف</button>
-                <button class="btn btn-ghost">تقارير المشاريع</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-      </div>
     </section>
   `,
   styles: [`
@@ -198,6 +186,7 @@ import { CommonModule } from '@angular/common';
       border: 1px solid rgba(26, 79, 138, 0.1);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
       transition: transform 0.3s ease;
+      margin-bottom: 24px;
     }
     
     .no-padding { padding: 0 !important; }

@@ -22,15 +22,8 @@ export class AuthService {
   private readonly SESSION_KEY = 'bnyan_session';
 
   currentUser$ = new BehaviorSubject<User | null>(null);
-  private logoutTimer: any;
 
   constructor(private storage: StorageService, private router: Router) {
-    this.loadSession();
-  }
-
-  private loadSession(): void {
-    // Session persistence disabled as per user request
-    /*
     const session = this.storage.get(this.SESSION_KEY);
     if (session) {
       const users = this.getUsers();
@@ -39,7 +32,6 @@ export class AuthService {
         this.currentUser$.next(user);
       }
     }
-    */
   }
 
   private getUsers(): User[] {
@@ -170,15 +162,14 @@ export class AuthService {
       }
     }
 
+    // Save session to storage
+    this.storage.set(this.SESSION_KEY, { userId: user.id });
     this.currentUser$.next(user);
 
-    // Auto-logout after 20 seconds
-    if (this.logoutTimer) clearTimeout(this.logoutTimer);
-
-    this.logoutTimer = setTimeout(() => {
-      console.log('Session expired (20 seconds)');
-      this.logout();
-    }, 20000);
+    if (this.logoutTimer) {
+      clearTimeout(this.logoutTimer);
+      this.logoutTimer = null;
+    }
   }
 
   logout(): void {

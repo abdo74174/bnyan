@@ -703,26 +703,30 @@ export class KycComponent {
   }
 
   private animateLoading() {
-    const steps = [
-      { target: 30, delay: 800 },
-      { target: 65, delay: 800 },
-      { target: 90, delay: 700 },
-      { target: 100, delay: 400 },
-    ];
+    this.loadingProgress = 0;
 
-    let i = 0;
-    const run = () => {
-      if (i >= steps.length) {
-        // Final transition to results exactly at the 3s mark (0.8+0.8+0.7+0.4 + 0.3 = 3.0)
-        setTimeout(() => this.showResult(), 300);
-        return;
+    // Step 1: 30% after 0.8s
+    setTimeout(() => { this.loadingProgress = 30; }, 800);
+
+    // Step 2: 65% after 1.6s
+    setTimeout(() => { this.loadingProgress = 65; }, 1600);
+
+    // Step 3: 90% after 2.3s
+    setTimeout(() => { this.loadingProgress = 90; }, 2300);
+
+    // Step 4: 100% after 2.7s
+    setTimeout(() => { this.loadingProgress = 100; }, 2700);
+
+    // Final Step: Show Result after 3.0s total
+    setTimeout(() => {
+      try {
+        this.showResult();
+      } catch (e) {
+        console.error('KYC Error:', e);
+        this.currentStep = 3;
+        this.verificationResult = 'fail';
       }
-      this.loadingProgress = steps[i].target;
-      const delay = steps[i].delay;
-      i++;
-      setTimeout(run, delay);
-    };
-    run();
+    }, 3000);
   }
 
   private showResult() {

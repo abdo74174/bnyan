@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { InvestmentService, Investment } from '../../services/investment.service';
 
 @Component({
   selector: 'app-developer',
@@ -149,6 +150,43 @@ import { CommonModule } from '@angular/common';
                         </td>
                         <td class="amount text-center">{{inv.amount | number}} ر.س</td>
                         <td class="date text-left">{{inv.date}}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Developer Projects Management -->
+            <div class="card premium-card no-padding overflow-hidden" style="margin-top:30px">
+              <div class="card-header-simple">
+                <span class="icon">🏗️</span>
+                <span class="text">إدارة إنجاز المشاريع</span>
+              </div>
+              <div class="table-responsive">
+                <table class="modern-table">
+                  <thead>
+                    <tr>
+                      <th class="text-right">المشروع</th>
+                      <th class="text-center">الإنجاز الحالي</th>
+                      <th class="text-center">تحديث</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (inv of investments; track inv.id) {
+                      <tr>
+                        <td>
+                          <div class="user-cell">
+                            <span class="name">{{inv.name}}</span>
+                          </div>
+                        </td>
+                        <td class="text-center">
+                          <div style="font-size:12px;font-weight:700">{{inv.progress}}%</div>
+                          <div class="mini-bar"><div class="mini-fill" [style.width.%]="inv.progress"></div></div>
+                        </td>
+                        <td class="text-center">
+                          <button class="btn btn-sm" style="padding:4px 10px;font-size:11px;background:rgba(46, 204, 135, 0.1);color:#2ecc87" (click)="cycleProgress(inv)">تحديث النسبة</button>
+                        </td>
                       </tr>
                     }
                   </tbody>

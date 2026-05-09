@@ -483,11 +483,30 @@ export class DeveloperComponent {
     { name: 'كاملة السبيعي', avatar: 'كا', avatarBg: '#8e44ad', amount: 150000, date: '05 أبريل' }
   ];
 
+  investments: Investment[] = [];
+
+  constructor(public invService: InvestmentService) {
+    this.invService.investments$.subscribe(data => {
+      this.investments = data;
+    });
+  }
+
   publishUpdate() {
     if (this.publishSuccess) return;
     this.publishSuccess = true;
     setTimeout(() => {
       this.publishSuccess = false;
     }, 3000);
+  }
+
+  cycleProgress(inv: Investment) {
+    let next = 0;
+    if (inv.progress < 25) next = 25;
+    else if (inv.progress < 50) next = 50;
+    else if (inv.progress < 75) next = 75;
+    else if (inv.progress < 100) next = 100;
+    else next = 0;
+
+    this.invService.updateProgress(inv.id, next);
   }
 }

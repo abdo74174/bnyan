@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -684,7 +684,7 @@ import { AuthService } from '../../services/auth.service';
   `]
 })
 export class KycComponent {
-  nationalId = '';
+  nationalId = '1234567890';
   currentStep = 1;
   verificationResult: 'success' | 'fail' | null = null;
   loadingProgress = 0;
@@ -694,7 +694,13 @@ export class KycComponent {
     return this.nationalId.slice(0, 3) + '****' + this.nationalId.slice(-2);
   }
 
-  constructor(public kyc: KycService, private auth: AuthService, private router: Router, private ngZone: NgZone) { }
+  constructor(
+    public kyc: KycService,
+    private auth: AuthService,
+    private router: Router,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   startVerification() {
     this.currentStep = 2;
@@ -704,11 +710,11 @@ export class KycComponent {
 
   private animateLoading() {
     this.loadingProgress = 0;
+    this.cdr.detectChanges();
 
-    // Plain setTimeout — Zone.js patches these automatically, no NgZone tricks needed
-    setTimeout(() => { this.loadingProgress = 33; }, 1000);
-    setTimeout(() => { this.loadingProgress = 66; }, 2000);
-    setTimeout(() => { this.loadingProgress = 100; }, 2700);
+    setTimeout(() => { this.loadingProgress = 33; this.cdr.detectChanges(); }, 1000);
+    setTimeout(() => { this.loadingProgress = 66; this.cdr.detectChanges(); }, 2000);
+    setTimeout(() => { this.loadingProgress = 100; this.cdr.detectChanges(); }, 2700);
     setTimeout(() => { this.showResult(); }, 3000);
   }
 
@@ -718,16 +724,15 @@ export class KycComponent {
 
     this.verificationResult = succeeds ? 'success' : 'fail';
     this.currentStep = 3;
+    this.cdr.detectChanges(); // Force re-render immediately
 
     if (succeeds) {
-      // Directly approve without the 5-second pending delay in the service
       try {
         this.kyc.directApprove();
       } catch (e) {
         console.error('KycService Error:', e);
       }
 
-      // Auto-navigate to dashboard after 3 seconds of showing success
       setTimeout(() => {
         if (this.currentStep === 3 && this.verificationResult === 'success') {
           this.goDashboard();

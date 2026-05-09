@@ -26,8 +26,26 @@ export class InvestmentService {
     { id: 4, name: 'واجهة الخبر', type: 'مختلط', location: 'الخبر', amount: 160000, expectedReturn: 48640, remainingMonths: 16, progress: 10, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (6).jpeg' }
   ];
 
-  private investmentsSubject = new BehaviorSubject<Investment[]>(this.initialInvestments);
+  private investmentsSubject = new BehaviorSubject<Investment[]>(this.loadFromStorage());
   investments$ = this.investmentsSubject.asObservable();
+
+  constructor() {
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'bnyan_investments') {
+        this.investmentsSubject.next(this.loadFromStorage());
+      }
+    });
+  }
+
+  private loadFromStorage(): Investment[] {
+    const stored = localStorage.getItem('bnyan_investments');
+    return stored ? JSON.parse(stored) : this.initialInvestments;
+  }
+
+  private saveToStorage(data: Investment[]) {
+    localStorage.setItem('bnyan_investments', JSON.stringify(data));
+    this.investmentsSubject.next(data);
+  }
 
   get investments(): Investment[] {
     return this.investmentsSubject.value;
@@ -37,12 +55,12 @@ export class InvestmentService {
     const current = this.investments;
     const newId = current.length > 0 ? Math.max(...current.map(i => i.id)) + 1 : 1;
     const newInvestment = { ...inv, id: newId };
-    this.investmentsSubject.next([newInvestment, ...current]);
+    this.saveToStorage([newInvestment, ...current]);
   }
 
   updateProgress(id: number, newProgress: number) {
     const current = this.investments;
     const updated = current.map(inv => inv.id === id ? { ...inv, progress: newProgress } : inv);
-    this.investmentsSubject.next(updated);
+    this.saveToStorage(updated);
   }
 }

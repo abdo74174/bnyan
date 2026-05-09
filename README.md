@@ -1,59 +1,71 @@
-# Bnyan
+# Bnyan (بنيان) 🏗️
+### منصة استثمار عقاري سعودية متطورة
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.10.
+بنيان هي منصة سعودية رائدة في مجال الاستثمار العقاري الرقمي، تهدف إلى توفير فرص استثمارية آمنة وموثوقة للمستثمرين في المملكة العربية السعودية بما يتوافق مع رؤية المملكة 2030.
 
-## Development server
+## 🚀 نظرة عامة على المشروع
 
-To start a local development server, run:
+تم بناء هذا المشروع باستخدام **Angular** مع التركيز على تجربة مستخدم (UX) استثنائية وتصميم عصري (Premium UI). المشروع حالياً يتضمن رحلة متكاملة للمستخدم تبدأ من التعريف بالمنصة وصولاً إلى لوحة التحكم الشخصية.
 
-```bash
-ng serve
+## 🛠️ التقنيات المستخدمة
+
+- **Framework**: Angular (Standalone Components)
+- **Styling**: Vanilla CSS (Custom Design System)
+- **State Management**: RxJS & BehaviorSubjects
+- **Typography**: IBM Plex Sans Arabic
+- **Deployment Ready**: Angular CLI 21.2.x
+
+## ✨ المميزات الرئيسية
+
+### 1. نظام التحقق من الهوية (KYC) - *Auth Verified* 🛡️
+نظام متطور لمحاكاة التحقق من الهوية الوطنية بلمسة احترافية:
+- **تحقق سريع**: يستغرق التحقق 3 ثوانٍ فقط لضمان سلاسة التجربة.
+- **تفاعلية عالية**: شريط تقدم (Progress Bar) يعكس حالة التحقق في الوقت الفعلي.
+- **أمان عالي**: رسائل توضح تشفير البيانات SSL ومعايير الأمن السيبراني.
+- **توجيه آلي**: الانتقال تلقائياً للوحة التحكم فور نجاح العملية.
+
+### 2. رحلة الانضمام (Onboarding)
+واجهات تعريفية مميزة تشرح مميزات المنصة وتسهل عملية تسجيل المستخدم الجديد.
+
+### 3. لوحة التحكم (Dashboard)
+واجهة شاملة للمستثمر لمتابعة استثماراته وعقاراته.
+
+## 📁 هيكلة المشروع
+
+```text
+src/app/
+├── pages/
+│   ├── kyc/          # واجهة التحقق من الهوية ومنطق المحاكاة
+│   ├── onboarding/   # صفحات التعريف بالمنصة
+│   └── dashboard/    # لوحة تحكم المستثمر
+├── services/
+│   ├── auth.service/ # إدارة الجلسات والمستخدمين
+│   └── kyc.service/  # معالجة بيانات التحقق وحالتها
+└── shared/           # المكونات والقوالب المشتركة
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## ⚙️ التشغيل والتطوير
 
-## Code scaffolding
+لبدء العمل على المشروع محلياً:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. قم بتثبيت التبعيات:
+   ```bash
+   npm install
+   ```
 
-```bash
-ng generate component component-name
-```
+2. ابدأ خادم التطوير:
+   ```bash
+   ng serve
+   ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+3. افتح المتصفح على `http://localhost:4200/`
 
-```bash
-ng generate --help
-```
+## ⚖️ الامتثال والمعايير
 
-## Building
+يلتزم المشروع في تصميمه بالمعايير التنظيمية المعمول بها في المملكة العربية السعودية:
+- متوافق مع متطلبات هيئة السوق المالية (**CMA**).
+- متوافق مع معايير البنك المركزي السعودي (**SAMA**).
+- تصميم يراعي تكامل منصة **نفاذ** الوطنية.
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+*تم تطوير هذا المشروع لتقديم تجربة استثمارية رقمية فاخرة وآمنة.*

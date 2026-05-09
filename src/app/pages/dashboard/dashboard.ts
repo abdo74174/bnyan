@@ -17,7 +17,7 @@ import { InvestmentService, Investment } from '../../services/investment.service
           <div class="dash-kpi" style="border-bottom: 3px solid #2ecc87"><div class="dash-kpi-val" style="color:#2ecc87">{{ wallet.balance$ | async | number }}</div><div class="dash-kpi-lbl">الرصيد النقدي المتاح (ر.س)</div><div class="dash-kpi-change" style="color:var(--text3)">جاهز للاستثمار بالمحفظة</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">{{ totalInvestment | number }}</div><div class="dash-kpi-lbl">إجمالي الاستثمارات (ر.س)</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">{{ totalEscrow | number }}</div><div class="dash-kpi-lbl">رصيد حساب الضمان (ر.س)</div><div class="dash-kpi-change" style="color:var(--text3)">أموال محتجزة وآمنة</div></div>
-          <div class="dash-kpi"><div class="dash-kpi-val">69,300</div><div class="dash-kpi-lbl">العوائد المتوقعة (ر.س)</div></div>
+          <div class="dash-kpi"><div class="dash-kpi-val">{{ totalExpectedReturn | number }}</div><div class="dash-kpi-lbl">العوائد المتوقعة (ر.س)</div></div>
         </div>
       </div>
     </div>
@@ -159,6 +159,10 @@ export class DashboardComponent {
 
   get totalInvestment() {
     return this.investments.reduce((sum, inv) => sum + inv.amount, 0);
+  }
+
+  get totalExpectedReturn() {
+    return this.investments.reduce((sum, inv) => sum + inv.expectedReturn, 0);
   }
 
   get totalDrawn() {

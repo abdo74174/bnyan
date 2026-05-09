@@ -82,7 +82,12 @@ import { InvestmentService } from '../../services/investment.service';
                   <label style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);cursor:pointer"><input type="checkbox" checked style="margin-top:2px"> أدرك أن الاستثمار غير قابل للسحب خلال مدة المشروع البالغة 24 شهراً</label>
                 </div>
                 <div style="display:flex;gap:12px">
-                  <button class="btn btn-accent btn-lg" style="flex:1" (click)="confirmInvest()">تأكيد الاستثمار ←</button>
+                  <button class="btn btn-accent btn-lg" style="flex:1" 
+                          [disabled]="((wallet.balance$ | async) ?? 0) < amount" 
+                          [class.disabled]="((wallet.balance$ | async) ?? 0) < amount"
+                          (click)="confirmInvest()">
+                    تأكيد الاستثمار ←
+                  </button>
                   <a routerLink="/detail" class="btn btn-ghost btn-lg" style="flex:1;justify-content:center">مراجعة المشروع</a>
                 </div>
                 <div style="font-size:12px;color:var(--text3);text-align:center;margin-top:10px">🔒 أموالك تُحوَّل إلى حساب ضماني مستقل فور التأكيد</div>
@@ -131,6 +136,11 @@ import { InvestmentService } from '../../services/investment.service';
   `,
   styles: [`
     :host { display: block; }
+    .btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
   `]
 })
 export class InvestComponent {

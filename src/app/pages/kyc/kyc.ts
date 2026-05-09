@@ -704,10 +704,10 @@ export class KycComponent {
 
   private animateLoading() {
     const steps = [
-      { target: 30, delay: 600 },
-      { target: 65, delay: 700 },
-      { target: 90, delay: 600 },
-      { target: 100, delay: 500 },
+      { target: 30, delay: 1500 },
+      { target: 65, delay: 1500 },
+      { target: 90, delay: 1200 },
+      { target: 100, delay: 800 },
     ];
 
     let i = 0;

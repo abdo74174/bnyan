@@ -39,4 +39,10 @@ export class InvestmentService {
     const newInvestment = { ...inv, id: newId };
     this.investmentsSubject.next([newInvestment, ...current]);
   }
+
+  updateProgress(id: number, newProgress: number) {
+    const current = this.investments;
+    const updated = current.map(inv => inv.id === id ? { ...inv, progress: newProgress } : inv);
+    this.investmentsSubject.next(updated);
+  }
 }

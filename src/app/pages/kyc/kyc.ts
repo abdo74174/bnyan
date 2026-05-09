@@ -176,8 +176,6 @@ import { AuthService } from '../../services/auth.service';
     </div>
   `,
   styles: [`
-    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap');
-
     :host { display: block; font-family: 'IBM Plex Sans Arabic', sans-serif; }
 
     /* ── Page ── */

@@ -48,9 +48,12 @@ import { AuthService } from '../../services/auth.service';
               <div class="step-label">التحقق</div>
             </div>
             <div class="step-line" [class.active]="currentStep > 2"></div>
-            <div class="step" [class.active]="currentStep >= 3">
-              <div class="step-circle">3</div>
-              <div class="step-label">النتيجة</div>
+            <div class="step" [class.active]="currentStep >= 3" [class.done]="currentStep === 3">
+              <div class="step-circle">
+                <span *ngIf="currentStep < 3">3</span>
+                <span *ngIf="currentStep === 3">✓</span>
+              </div>
+              <div class="step-label">اكتمال التحقق</div>
             </div>
           </div>
 
@@ -100,10 +103,10 @@ import { AuthService } from '../../services/auth.service';
                 <span class="ls-dot"></span> التحقق من صحة الرقم
               </div>
               <div class="ls-item" [class.done]="loadingProgress >= 60">
-                <span class="ls-dot"></span> مطابقة البيانات التجريبية
+                <span class="ls-dot"></span> مطابقة السجلات الوطنية الموحدة
               </div>
               <div class="ls-item" [class.done]="loadingProgress >= 90">
-                <span class="ls-dot"></span> إصدار تقرير التحقق النهائي
+                <span class="ls-dot"></span> توثيق الهوية الرقمية (Auth Verified)
               </div>
             </div>
           </div>
@@ -111,7 +114,7 @@ import { AuthService } from '../../services/auth.service';
           <!-- ── STEP 3 SUCCESS ── -->
           <div class="result-section success-result" *ngIf="currentStep === 3 && verificationResult === 'success'">
             <div class="result-icon success-icon">✓</div>
-            <div class="result-badge success-badge">تم التحقق بنجاح</div>
+            <div class="result-badge success-badge">تم التحقق والتوثيق (Auth Verified)</div>
             <h3>تم التحقق من الهوية</h3>
             <p>تم التحقق من هويتك بنجاح عبر النظام الموحد. يمكنك الآن البدء في الاستثمار.</p>
             <div class="result-details">

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { WalletService } from '../../services/wallet.service';
 
 @Component({
   selector: 'app-invest',
@@ -27,6 +28,23 @@ import { FormsModule } from '@angular/forms';
 
           <div class="two-col">
             <div>
+              <!-- Wallet Balance -->
+              <div class="card" style="padding:16px 20px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;background:rgba(46, 204, 135, 0.05);border:1px solid rgba(46, 204, 135, 0.2)">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:36px;height:36px;border-radius:50%;background:rgba(46, 204, 135, 0.1);display:flex;align-items:center;justify-content:center;color:#2ecc87">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+                  </div>
+                  <div>
+                    <div style="font-size:12px;color:var(--text3)">الرصيد النقدي المتاح</div>
+                    <div style="font-size:15px;font-weight:700;color:var(--text1)">{{ wallet.balance$ | async | number }} ر.س</div>
+                  </div>
+                </div>
+                <!-- Error Message -->
+                @if (errorMsg) {
+                  <div style="color:var(--red);font-size:12px;font-weight:700">{{ errorMsg }}</div>
+                }
+              </div>
+
               <!-- Amount -->
               <div class="card" style="padding:24px;margin-bottom:18px">
                 <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:12px">مبلغ الاستثمار</div>
@@ -101,7 +119,8 @@ import { FormsModule } from '@angular/forms';
         <div style="font-size:14px;color:var(--text3);line-height:1.7;margin-bottom:28px">استثمرت في مشروع أبراج الرقي التجاري. يمكنك متابعة استثمارك من لوحة التحكم في أي وقت.</div>
         <div style="background:var(--bg);border-radius:var(--r-lg);padding:16px;margin-bottom:20px;text-align:right">
           <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">المشروع</span><span style="font-weight:700">أبراج الرقي</span></div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">المبلغ</span><span style="font-weight:700">{{amount | number}} ر.س</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">المبلغ المستثمر</span><span style="font-weight:700">{{amount | number}} ر.س</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">الرصيد المتبقي في المحفظة</span><span style="font-weight:700;color:#2ecc87">{{ wallet.balance$ | async | number }} ر.س</span></div>
           <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:13px"><span style="color:var(--text3)">رقم العملية</span><span style="font-weight:700">#BNY-2025-4182</span></div>
         </div>
         <a routerLink="/dashboard" class="btn btn-primary btn-lg" style="width:100%;margin-bottom:10px;text-decoration:none;display:flex;justify-content:center">عرض محفظتي ←</a>
@@ -120,8 +139,9 @@ export class InvestComponent {
   maturityValue: number = 0;
   hints = [25000, 50000, 100000, 250000];
   showSuccess: boolean = false;
+  errorMsg: string = '';
 
-  constructor() {
+  constructor(public wallet: WalletService) {
     this.calculate();
   }
 
@@ -135,9 +155,15 @@ export class InvestComponent {
     this.annualReturn = Math.round(n * 0.2);
     this.totalReturn = this.annualReturn * 2;
     this.maturityValue = n + this.totalReturn;
+    this.errorMsg = ''; // Reset error when typing
   }
 
   confirmInvest() {
-    this.showSuccess = true;
+    if (this.wallet.deduct(this.amount)) {
+      this.showSuccess = true;
+      this.errorMsg = '';
+    } else {
+      this.errorMsg = 'الرصيد المتاح غير كافٍ للاستثمار';
+    }
   }
 }

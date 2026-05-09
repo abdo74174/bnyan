@@ -59,7 +59,7 @@ import { AuthService } from '../../services/auth.service';
   styles: [`:host { display: block; }`]
 })
 export class OnboardingComponent {
-  constructor(public auth: AuthService, private router: Router) {}
+  constructor(public auth: AuthService, private router: Router) { }
 
   startKyc() {
     this.auth.updateUser({ onboardingDone: true });

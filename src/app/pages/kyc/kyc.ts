@@ -732,6 +732,13 @@ export class KycComponent {
 
     if (succeeds) {
       this.kyc.submitKyc('demo', 'demo', 'demo');
+
+      // Auto-navigate to dashboard after 3 seconds of showing success
+      setTimeout(() => {
+        if (this.currentStep === 3 && this.verificationResult === 'success') {
+          this.goDashboard();
+        }
+      }, 3000);
     }
   }
 

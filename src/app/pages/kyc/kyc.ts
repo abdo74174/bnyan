@@ -704,44 +704,25 @@ export class KycComponent {
 
   private animateLoading() {
     this.loadingProgress = 0;
-    const duration = 3000; // 3 seconds
-    const intervalTime = 50;
-    const startTime = Date.now();
 
-    // Run outside Angular zone for performance, re-enter for state changes
-    this.ngZone.runOutsideAngular(() => {
-      const timer = setInterval(() => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min((elapsed / duration) * 100, 100);
-
-        // Re-enter Angular zone so change detection fires
-        this.ngZone.run(() => {
-          this.loadingProgress = progress;
-        });
-
-        if (elapsed >= duration) {
-          clearInterval(timer);
-          this.ngZone.run(() => {
-            this.showResult();
-          });
-        }
-      }, intervalTime);
-    });
+    // Plain setTimeout — Zone.js patches these automatically, no NgZone tricks needed
+    setTimeout(() => { this.loadingProgress = 33; }, 1000);
+    setTimeout(() => { this.loadingProgress = 66; }, 2000);
+    setTimeout(() => { this.loadingProgress = 100; }, 2700);
+    setTimeout(() => { this.showResult(); }, 3000);
   }
 
   private showResult() {
     const id = this.nationalId || '';
-    // Demo simulation: IDs starting with '1' succeed, others fail
     const succeeds = id.startsWith('1') || id.length === 10;
 
-    // Update UI state immediately
     this.verificationResult = succeeds ? 'success' : 'fail';
     this.currentStep = 3;
 
     if (succeeds) {
-      // Mock submission - wrap in try-catch to prevent blocking UI
+      // Directly approve without the 5-second pending delay in the service
       try {
-        this.kyc.submitKyc('demo', 'demo', 'demo');
+        this.kyc.directApprove();
       } catch (e) {
         console.error('KycService Error:', e);
       }

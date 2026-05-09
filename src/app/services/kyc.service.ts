@@ -78,6 +78,33 @@ export class KycService {
     return { success: true, message: 'تم إرسال طلب التحقق بنجاح' };
   }
 
+  directApprove(): void {
+    const user = this.auth.currentUser;
+    if (!user) return;
+
+    const all = this.getAllKyc();
+    const existing = all.findIndex(k => k.userId === user.id);
+    const kycData: KycData = {
+      userId: user.id,
+      frontId: null,
+      backId: null,
+      selfie: null,
+      status: 'approved',
+      submittedAt: new Date().toISOString(),
+      reviewedAt: new Date().toISOString()
+    };
+
+    if (existing !== -1) {
+      all[existing] = kycData;
+    } else {
+      all.push(kycData);
+    }
+
+    this.saveAllKyc(all);
+    this.auth.updateUser({ kycStatus: 'approved' });
+    this.kycStatus$.next('approved');
+  }
+
   private approveKyc(userId: string): void {
     const all = this.getAllKyc();
     const idx = all.findIndex(k => k.userId === userId);

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { WalletService } from '../../services/wallet.service';
+import { InvestmentService, Investment } from '../../services/investment.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,11 +13,11 @@ import { CommonModule } from '@angular/common';
       <div class="container">
         <div class="dash-welcome">مرحباً بك،</div>
         <div class="dash-name">أحمد الحربي</div>
-        <div class="dash-kpis">
+        <div class="dash-kpis" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+          <div class="dash-kpi" style="border-bottom: 3px solid #2ecc87"><div class="dash-kpi-val" style="color:#2ecc87">{{ wallet.balance$ | async | number }}</div><div class="dash-kpi-lbl">الرصيد النقدي المتاح (ر.س)</div><div class="dash-kpi-change" style="color:var(--text3)">جاهز للاستثمار بالمحفظة</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">{{ totalInvestment | number }}</div><div class="dash-kpi-lbl">إجمالي الاستثمارات (ر.س)</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">{{ totalEscrow | number }}</div><div class="dash-kpi-lbl">رصيد حساب الضمان (ر.س)</div><div class="dash-kpi-change" style="color:var(--text3)">أموال محتجزة وآمنة</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">69,300</div><div class="dash-kpi-lbl">العوائد المتوقعة (ر.س)</div></div>
-          <div class="dash-kpi"><div class="dash-kpi-val">4</div><div class="dash-kpi-lbl">مشاريع نشطة</div></div>
         </div>
       </div>
     </div>
@@ -147,12 +149,13 @@ export class DashboardComponent {
   chips = ['6 أشهر', 'سنة', 'كل الوقت'];
   activeChip = '6 أشهر';
 
-  investments = [
-    { id: 1, name: 'أبراج الرقي التجاري', type: 'تجاري', location: 'الرياض', amount: 50000, expectedReturn: 20000, remainingMonths: 14, progress: 25, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (1).jpeg' },
-    { id: 2, name: 'بوابة جدة', type: 'فندقي', location: 'جدة', amount: 100000, expectedReturn: 34000, remainingMonths: 8, progress: 50, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (4).jpeg' },
-    { id: 3, name: 'النخيل السكني', type: 'سكني', location: 'الدمام', amount: 75000, expectedReturn: 18000, remainingMonths: 22, progress: 0, status: 'جديد', statusBadgeClass: 'badge-blue', img: 'assets/images/OIP (5).jpeg' },
-    { id: 4, name: 'واجهة الخبر', type: 'مختلط', location: 'الخبر', amount: 160000, expectedReturn: 48640, remainingMonths: 16, progress: 10, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (6).jpeg' }
-  ];
+  investments: Investment[] = [];
+
+  constructor(public wallet: WalletService, public invService: InvestmentService) {
+    this.invService.investments$.subscribe(data => {
+      this.investments = data;
+    });
+  }
 
   get totalInvestment() {
     return this.investments.reduce((sum, inv) => sum + inv.amount, 0);

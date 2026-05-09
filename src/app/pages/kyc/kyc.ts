@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { KycService } from '../../services/kyc.service';
 import { AuthService } from '../../services/auth.service';
@@ -7,399 +8,735 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-kyc',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="kyc-page">
       <div class="kyc-container">
+
+        <!-- Top Demo Banner -->
+        <div class="demo-banner">
+          <span class="demo-dot"></span>
+          وضع تجريبي (Sandbox) — هذه بيئة محاكاة آمنة للتحقق من الهوية
+        </div>
+
         <div class="kyc-card">
+
+          <!-- Header -->
           <div class="kyc-header">
-            <div class="kyc-badge">التحقق من الهوية</div>
-            <h1>توثيق الحساب الاستثماري</h1>
-            <p>التحقق من الهوية مطلوب للامتثال للوائح هيئة السوق المالية في المملكة العربية السعودية</p>
+            <div class="shield-icon">🛡️</div>
+            <h1>التحقق من الهوية</h1>
+            <p class="subtitle">
+              نظام محاكاة آمن للتحقق من الهوية — هذا النظام للأغراض التجريبية فقط وليس متصلاً بأي جهة حكومية
+            </p>
           </div>
 
-          <!-- Pending Status -->
-          <div class="kyc-status-msg" *ngIf="(kyc.kycStatus$ | async) === 'pending'" class="animate-fade-in">
-            <div class="status-icon loading">⏳</div>
-            <h3>جاري معالجة طلبك</h3>
-            <p>نقوم حالياً بالتحقق من بياناتك. سيتم إخطارك بمجرد الانتهاء.</p>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 65%"></div>
+          <!-- Step Indicator -->
+          <div class="steps" *ngIf="(kyc.kycStatus$ | async) !== 'approved'">
+            <div class="step" [class.active]="currentStep >= 1" [class.done]="currentStep > 1">
+              <div class="step-circle">
+                <span *ngIf="currentStep <= 1">1</span>
+                <span *ngIf="currentStep > 1">✓</span>
+              </div>
+              <div class="step-label">إدخال الهوية</div>
+            </div>
+            <div class="step-line" [class.active]="currentStep > 1"></div>
+            <div class="step" [class.active]="currentStep >= 2" [class.done]="currentStep > 2">
+              <div class="step-circle">
+                <span *ngIf="currentStep <= 2">2</span>
+                <span *ngIf="currentStep > 2">✓</span>
+              </div>
+              <div class="step-label">التحقق</div>
+            </div>
+            <div class="step-line" [class.active]="currentStep > 2"></div>
+            <div class="step" [class.active]="currentStep >= 3">
+              <div class="step-circle">3</div>
+              <div class="step-label">النتيجة</div>
             </div>
           </div>
 
-          <!-- Approved Status -->
-          <div class="kyc-status-msg success-view" *ngIf="(kyc.kycStatus$ | async) === 'approved'">
-            <div class="status-icon success">✓</div>
-            <h3>تم التحقق بنجاح</h3>
-            <p>حسابك الآن موثق وجاهز للاستثمار في جميع المشاريع.</p>
-            <button (click)="goDashboard()" class="btn btn-primary" style="margin-top: 20px;">انتقل للوحة التحكم</button>
-          </div>
-
-          <!-- Form Step -->
-          <div class="kyc-form" *ngIf="(kyc.kycStatus$ | async) === 'none'">
-            <div class="upload-grid">
-              <div class="upload-box" [class.loading]="isLoading.front" [class.has-file]="files.front" (click)="upload('front')">
-                <div class="upload-icon" *ngIf="!files.front && !isLoading.front">🆔</div>
-                <div class="upload-label" *ngIf="!files.front && !isLoading.front">صورة الهوية (الأمام)</div>
-                
-                <div class="loading-spinner-v2" *ngIf="isLoading.front"></div>
-                
-                <div class="upload-preview" *ngIf="files.front" [style.backgroundImage]="'url('+files.front+')'">
-                   <div class="file-overlay">
-                     <span class="check-icon">✓</span>
-                   </div>
-                </div>
+          <!-- ── STEP 1: Input ── -->
+          <div class="form-section" *ngIf="currentStep === 1">
+            <div class="field-group">
+              <label class="field-label">رقم الهوية الوطنية / الإقامة</label>
+              <div class="input-wrapper">
+                <span class="input-icon">🪪</span>
+                <input
+                  type="text"
+                  class="id-input"
+                  [(ngModel)]="nationalId"
+                  placeholder="أدخل رقم الهوية (10 أرقام)"
+                  maxlength="10"
+                  dir="ltr"
+                />
               </div>
-
-              <div class="upload-box" [class.loading]="isLoading.back" [class.has-file]="files.back" (click)="upload('back')">
-                <div class="upload-icon" *ngIf="!files.back && !isLoading.back">🆔</div>
-                <div class="upload-label" *ngIf="!files.back && !isLoading.back">صورة الهوية (الخلف)</div>
-                
-                <div class="loading-spinner-v2" *ngIf="isLoading.back"></div>
-
-                <div class="upload-preview" *ngIf="files.back" [style.backgroundImage]="'url('+files.back+')'">
-                  <div class="file-overlay">
-                    <span class="check-icon">✓</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="upload-box full" [class.loading]="isLoading.selfie" [class.has-file]="files.selfie" (click)="upload('selfie')">
-                <div class="upload-icon" *ngIf="!files.selfie && !isLoading.selfie">📸</div>
-                <div class="upload-label" *ngIf="!files.selfie && !isLoading.selfie">صورة شخصية (Selfie) مع الهوية</div>
-                
-                <div class="loading-spinner-v2" *ngIf="isLoading.selfie"></div>
-
-                <div class="upload-preview" *ngIf="files.selfie" [style.backgroundImage]="'url('+files.selfie+')'">
-                  <div class="file-overlay">
-                    <span class="check-icon">✓</span>
-                  </div>
-                </div>
-              </div>
+              <div class="field-hint">مثال: 1234567890 — هذه بيانات تجريبية ولا يتم التحقق منها فعلياً</div>
             </div>
 
-            <div class="kyc-compliance" style="display:flex; justify-content:space-between; align-items:center;">
-              <p>📍 ملاحظة: يجب أن تكون الصور واضحة وجميع البيانات مقروءة.</p>
-              <button (click)="quickFill()" class="btn btn-ghost btn-sm demo-btn" [disabled]="isSubmitting">
-                <span class="sparkle">✨</span> تعبئة سريعة (ديمو)
-              </button>
-            </div>
-
-            <button (click)="submit()" class="btn btn-primary btn-lg submit-btn" [disabled]="!canSubmit()" [class.is-loading]="isSubmitting" style="width: 100%; margin-top: 30px;">
-              <span *ngIf="!isSubmitting">إرسال للتحقق</span>
-              <div class="loading-dots" *ngIf="isSubmitting">
-                <span>.</span><span>.</span><span>.</span>
-              </div>
+            <button class="btn-primary" (click)="startVerification()" [disabled]="!nationalId || nationalId.length < 7">
+              <span class="btn-icon">🔍</span>
+              التحقق من الهوية
             </button>
 
-            <!-- Saudi Permits & Authorities -->
-            <div class="permits-footer" style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; display: flex; justify-content: space-around; align-items: center; opacity: 0.8;">
-              <div class="permit-item" style="text-align: center;">
-                <div style="font-size: 10px; color: #6b82a0; margin-bottom: 4px;">مرخص من</div>
-                <div style="font-weight: 700; color: #1a4f8a; font-size: 12px;">هيئة السوق المالية</div>
+            <div class="trust-row">
+              <div class="trust-item"><span>🔒</span> بيئة مشفرة</div>
+              <div class="trust-item"><span>🧪</span> للاختبار فقط</div>
+              <div class="trust-item"><span>🛡️</span> محاكاة آمنة</div>
+            </div>
+          </div>
+
+          <!-- ── STEP 2: Loading ── -->
+          <div class="loading-section" *ngIf="currentStep === 2">
+            <div class="loading-ring">
+              <div class="ring"></div>
+              <div class="ring-inner">🛡️</div>
+            </div>
+            <h3>جاري محاكاة التحقق من الهوية...</h3>
+            <p class="loading-sub">يتم معالجة البيانات في البيئة التجريبية الآمنة</p>
+            <div class="progress-track">
+              <div class="progress-fill" [style.width]="loadingProgress + '%'"></div>
+            </div>
+            <div class="loading-steps-list">
+              <div class="ls-item" [class.done]="loadingProgress >= 30">
+                <span class="ls-dot"></span> التحقق من صحة الرقم
               </div>
-              <div style="width: 1px; height: 30px; background: #eee;"></div>
-              <div class="permit-item" style="text-align: center;">
-                <div style="font-size: 10px; color: #6b82a0; margin-bottom: 4px;">متصل عبر</div>
-                <div style="font-weight: 700; color: #1a4f8a; font-size: 12px;">نفاذ الوطني</div>
+              <div class="ls-item" [class.done]="loadingProgress >= 60">
+                <span class="ls-dot"></span> مطابقة البيانات التجريبية
               </div>
-              <div style="width: 1px; height: 30px; background: #eee;"></div>
-              <div class="permit-item" style="text-align: center;">
-                <div style="font-size: 10px; color: #6b82a0; margin-bottom: 4px;">مطابق لمعايير</div>
-                <div style="font-weight: 700; color: #1a4f8a; font-size: 12px;">البنك المركزي (SAMA)</div>
+              <div class="ls-item" [class.done]="loadingProgress >= 90">
+                <span class="ls-dot"></span> إنشاء تقرير المحاكاة
               </div>
             </div>
           </div>
+
+          <!-- ── STEP 3 SUCCESS ── -->
+          <div class="result-section success-result" *ngIf="currentStep === 3 && verificationResult === 'success'">
+            <div class="result-icon success-icon">✓</div>
+            <div class="result-badge success-badge">تم التحقق (Demo)</div>
+            <h3>تم التحقق بنجاح (محاكاة)</h3>
+            <p>تمت محاكاة التحقق من هويتك بنجاح في البيئة التجريبية. يمكنك الآن المتابعة.</p>
+            <div class="result-details">
+              <div class="detail-row">
+                <span class="detail-label">رقم الهوية</span>
+                <span class="detail-val">{{ maskedId }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">الحالة</span>
+                <span class="detail-val success-text">محقق (Demo)</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">البيئة</span>
+                <span class="detail-val">Sandbox / تجريبية</span>
+              </div>
+            </div>
+            <button class="btn-primary" (click)="goDashboard()">
+              <span class="btn-icon">🚀</span> متابعة إلى لوحة التحكم
+            </button>
+          </div>
+
+          <!-- ── STEP 3 FAILURE ── -->
+          <div class="result-section fail-result" *ngIf="currentStep === 3 && verificationResult === 'fail'">
+            <div class="result-icon fail-icon">✕</div>
+            <div class="result-badge fail-badge">فشل التحقق (Demo)</div>
+            <h3>فشل التحقق (محاكاة)</h3>
+            <p>تعذّر التحقق من الهوية في هذه المحاكاة. يرجى إعادة المحاولة.</p>
+            <button class="btn-retry" (click)="retry()">
+              <span class="btn-icon">🔄</span> إعادة المحاولة
+            </button>
+          </div>
+
+          <!-- Approved Status (from service) -->
+          <div class="result-section success-result" *ngIf="(kyc.kycStatus$ | async) === 'approved'">
+            <div class="result-icon success-icon">✓</div>
+            <h3>تم التحقق من حسابك</h3>
+            <p>حسابك موثق وجاهز للاستثمار.</p>
+            <button class="btn-primary" (click)="goDashboard()">
+              <span class="btn-icon">🚀</span> انتقل للوحة التحكم
+            </button>
+          </div>
+
+          <!-- Footer Permits -->
+          <div class="permits-footer">
+            <div class="permit-item">
+              <div class="permit-label">مصرح من</div>
+              <div class="permit-value">هيئة سوق المال</div>
+            </div>
+            <div class="permit-divider"></div>
+            <div class="permit-item">
+              <div class="permit-label">مصرح من</div>
+              <div class="permit-value">البنك المركزي (SAMA)</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="kyc-footnote">
+          🔐 بيئة مشفرة تجريبية — جميع البيانات المستخدمة هنا للاختبار فقط ولا تُرسل لأي جهة
         </div>
       </div>
     </div>
   `,
   styles: [`
-    :host { display: block; }
-    
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap');
+
+    :host { display: block; font-family: 'IBM Plex Sans Arabic', sans-serif; }
+
+    /* ── Page ── */
     .kyc-page {
-      padding: 60px 20px;
-      min-height: calc(100vh - 70px);
-      background: #f4f7f9;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0f4ff 0%, #e8f5f0 100%);
+      padding: 40px 20px 60px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
     }
 
     .kyc-container {
-      max-width: 700px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 560px;
     }
 
+    /* ── Demo Banner ── */
+    .demo-banner {
+      background: linear-gradient(135deg, #1a4f8a, #0e9f6e);
+      color: #fff;
+      text-align: center;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.2px;
+    }
+
+    .demo-dot {
+      width: 8px; height: 8px;
+      background: #6ee7b7;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+      flex-shrink: 0;
+    }
+
+    /* ── Card ── */
     .kyc-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 10px 30px rgba(26, 79, 138, 0.08);
-      border: 1px solid rgba(0,0,0,0.03);
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow: 0 20px 60px rgba(26, 79, 138, 0.10), 0 4px 16px rgba(0,0,0,0.04);
+      border: 1px solid rgba(26, 79, 138, 0.07);
     }
 
+    /* ── Header ── */
     .kyc-header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 32px;
     }
 
-    .kyc-badge {
-      display: inline-block;
-      padding: 6px 16px;
-      background: rgba(26, 79, 138, 0.1);
-      color: #1a4f8a;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 13px;
-      margin-bottom: 15px;
+    .shield-icon {
+      font-size: 44px;
+      margin-bottom: 12px;
+      display: block;
+      filter: drop-shadow(0 4px 8px rgba(26,79,138,0.2));
     }
 
     .kyc-header h1 {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 800;
       color: #0f1f35;
-      margin-bottom: 10px;
+      margin: 0 0 10px;
     }
 
-    .kyc-header p {
+    .subtitle {
+      font-size: 13.5px;
       color: #6b82a0;
-      font-size: 15px;
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
-    .upload-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 25px;
+    /* ── Steps ── */
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 36px;
     }
 
-    .upload-box {
-      border: 2px dashed #d4dde8;
-      border-radius: 16px;
-      height: 160px;
+    .step {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      background: #fafbfc;
+      gap: 6px;
     }
 
-    .upload-box:hover {
+    .step-circle {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 2px solid #d4dde8;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px;
+      color: #aab4c2;
+      background: #f8f9fc;
+      transition: all 0.4s ease;
+    }
+
+    .step.active .step-circle {
       border-color: #1a4f8a;
-      background: rgba(26, 79, 138, 0.02);
+      background: #1a4f8a;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(26,79,138,0.35);
     }
 
-    .upload-box.has-file {
-      border-style: solid;
-      border-color: #2ecc87;
+    .step.done .step-circle {
+      border-color: #0e9f6e;
+      background: #0e9f6e;
+      color: #fff;
     }
 
-    .upload-box.loading {
-      border-color: #c8a84b;
-      cursor: wait;
+    .step-label {
+      font-size: 11px;
+      color: #aab4c2;
+      font-weight: 600;
+      white-space: nowrap;
     }
 
-    .upload-box.full {
-      grid-column: span 2;
+    .step.active .step-label { color: #1a4f8a; }
+    .step.done .step-label { color: #0e9f6e; }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: #e0e6ef;
+      margin: 0 8px;
+      margin-bottom: 22px;
+      transition: background 0.4s;
     }
 
-    .upload-icon {
-      font-size: 32px;
+    .step-line.active { background: #1a4f8a; }
+
+    /* ── Form ── */
+    .form-section {
+      animation: fadeUp 0.5s ease;
+    }
+
+    .field-group { margin-bottom: 24px; }
+
+    .field-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #2c3e50;
       margin-bottom: 10px;
     }
 
-    .upload-label {
-      font-weight: 700;
-      font-size: 14px;
-      color: #3a4f6a;
-    }
-
-    .upload-preview {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .file-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(46, 204, 135, 0.2);
+    .input-wrapper {
       display: flex;
       align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(2px);
-    }
-
-    .check-icon {
-      width: 40px;
-      height: 40px;
-      background: #2ecc87;
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 4px 10px rgba(46, 204, 135, 0.4);
-      animation: bounceIn 0.5s;
-    }
-
-    .kyc-status-msg {
-      text-align: center;
-      padding: 40px 0;
-    }
-
-    .status-icon {
-      font-size: 50px;
-      margin-bottom: 20px;
-    }
-
-    .status-icon.loading { animation: rotate 2s linear infinite; }
-    
-    .loading-spinner-v2 {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(26, 79, 138, 0.1);
-      border-top-color: #1a4f8a;
-      border-radius: 50%;
-      animation: rotate 0.8s linear infinite;
-    }
-
-    .submit-btn {
-      position: relative;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid #e0e6ef;
+      border-radius: 14px;
+      background: #fafbfc;
+      transition: all 0.3s;
       overflow: hidden;
     }
 
-    .submit-btn.is-loading {
-      background: #0f3360 !important;
-      transform: scale(0.98);
-      pointer-events: none;
+    .input-wrapper:focus-within {
+      border-color: #1a4f8a;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(26,79,138,0.08);
     }
 
-    .loading-dots span {
-      display: inline-block;
-      animation: dotPulse 1.4s infinite;
-      font-size: 24px;
-      line-height: 0;
-      vertical-align: middle;
+    .input-icon {
+      padding: 0 14px;
+      font-size: 20px;
+      flex-shrink: 0;
     }
-    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-    .demo-btn {
-      font-size: 12px !important;
+    .id-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 16px;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      padding: 14px 0 14px 14px;
+      color: #0f1f35;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .field-hint {
+      font-size: 12px;
+      color: #a0aab4;
+      margin-top: 8px;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #1a4f8a, #1565c0);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
       font-weight: 700;
-      color: #c8a84b !important;
-      border-color: #c8a84b !important;
-      background: rgba(200, 168, 75, 0.05) !important;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(26,79,138,0.30);
     }
 
-    .demo-btn:hover {
-      background: #c8a84b !important;
-      color: #fff !important;
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(26,79,138,0.40);
     }
 
-    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    
-    .animate-fade-in {
-      animation: fadeIn 0.6s ease forwards;
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
     }
 
+    .btn-retry {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      color: #e53e3e;
+      border: 2px solid #e53e3e;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s;
+      margin-top: 20px;
+    }
+
+    .btn-retry:hover {
+      background: #e53e3e;
+      color: #fff;
+    }
+
+    .btn-icon { font-size: 18px; }
+
+    /* ── Trust Row ── */
+    .trust-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #7a8fa8;
+      font-weight: 600;
+    }
+
+    /* ── Loading Section ── */
+    .loading-section {
+      text-align: center;
+      padding: 20px 0;
+      animation: fadeUp 0.5s ease;
+    }
+
+    .loading-ring {
+      position: relative;
+      width: 90px; height: 90px;
+      margin: 0 auto 24px;
+    }
+
+    .ring {
+      position: absolute; inset: 0;
+      border: 4px solid #e0e6ef;
+      border-top-color: #1a4f8a;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .ring-inner {
+      position: absolute; inset: 12px;
+      background: #f0f4ff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+    }
+
+    .loading-section h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f1f35;
+      margin: 0 0 8px;
+    }
+
+    .loading-sub {
+      font-size: 13px;
+      color: #7a8fa8;
+      margin-bottom: 20px;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: #e0e6ef;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1a4f8a, #0e9f6e);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    .loading-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: right;
+    }
+
+    .ls-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #aab4c2;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .ls-item.done { color: #0e9f6e; }
+
+    .ls-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #d4dde8;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+
+    .ls-item.done .ls-dot { background: #0e9f6e; }
+
+    /* ── Result Section ── */
+    .result-section {
+      text-align: center;
+      padding: 10px 0 20px;
+      animation: fadeUp 0.5s ease;
+    }
+
+    .result-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      font-weight: 900;
+      margin: 0 auto 16px;
+    }
+
+    .success-icon {
+      background: linear-gradient(135deg, #0e9f6e, #06b06a);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(14,159,110,0.35);
+      animation: bounceIn 0.6s;
+    }
+
+    .fail-icon {
+      background: linear-gradient(135deg, #e53e3e, #c53030);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(229,62,62,0.35);
+    }
+
+    .result-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .success-badge { background: #d1fae5; color: #065f46; }
+    .fail-badge { background: #fee2e2; color: #991b1b; }
+
+    .result-section h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f1f35;
+      margin: 0 0 10px;
+    }
+
+    .result-section p {
+      font-size: 14px;
+      color: #6b82a0;
+      margin-bottom: 20px;
+    }
+
+    .result-details {
+      background: #f8f9fc;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      text-align: right;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #edf0f5;
+      font-size: 13px;
+    }
+
+    .detail-row:last-child { border: none; }
+
+    .detail-label { color: #7a8fa8; font-weight: 600; }
+    .detail-val { color: #0f1f35; font-weight: 700; }
+    .success-text { color: #0e9f6e; }
+
+    /* ── Permits Footer ── */
+    .permits-footer {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid #edf0f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+    }
+
+    .permit-item {
+      text-align: center;
+      flex: 1;
+    }
+
+    .permit-label {
+      font-size: 10px;
+      color: #a0aab4;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .permit-value {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1a4f8a;
+    }
+
+    .permit-divider {
+      width: 1px;
+      height: 36px;
+      background: #edf0f5;
+      margin: 0 16px;
+    }
+
+    /* ── Footnote ── */
+    .kyc-footnote {
+      text-align: center;
+      font-size: 12px;
+      color: #7a8fa8;
+      margin-top: 20px;
+      font-weight: 500;
+    }
+
+    /* ── Animations ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     @keyframes bounceIn {
       0% { transform: scale(0.3); opacity: 0; }
-      50% { transform: scale(1.05); opacity: 1; }
-      70% { transform: scale(0.9); }
+      50% { transform: scale(1.1); opacity: 1; }
+      70% { transform: scale(0.95); }
       100% { transform: scale(1); }
     }
-    @keyframes dotPulse {
-      0%, 100% { opacity: 0.2; transform: translateY(0); }
-      50% { opacity: 1; transform: translateY(-5px); }
+
+    /* ── Mobile ── */
+    @media (max-width: 480px) {
+      .kyc-card { padding: 28px 20px; }
+      .kyc-header h1 { font-size: 22px; }
+      .trust-row { gap: 12px; }
+      .trust-item { font-size: 11px; }
     }
   `]
 })
 export class KycComponent {
-  files: any = {
-    front: null,
-    back: null,
-    selfie: null
-  };
+  nationalId = '';
+  currentStep = 1;
+  verificationResult: 'success' | 'fail' | null = null;
+  loadingProgress = 0;
 
-  isLoading: any = {
-    front: false,
-    back: false,
-    selfie: false
-  };
-
-  isSubmitting = false;
-
-  constructor(public kyc: KycService, private auth: AuthService, private router: Router) {
-    this.kyc.kycStatus$.subscribe(status => {
-      if (status === 'approved' && this.auth.currentUser?.kycStatus === 'approved') {
-        // Already approved
-      }
-    });
+  get maskedId() {
+    if (!this.nationalId) return '—';
+    return this.nationalId.slice(0, 3) + '****' + this.nationalId.slice(-2);
   }
 
-  upload(type: string) {
-    if (this.isLoading[type]) return;
+  constructor(public kyc: KycService, private auth: AuthService, private router: Router) { }
 
-    this.isLoading[type] = true;
-    // Simulate file upload
-    setTimeout(() => {
-      this.files[type] = 'assets/images/placeholder.jpg';
-      this.isLoading[type] = false;
-    }, 1200);
+  startVerification() {
+    this.currentStep = 2;
+    this.loadingProgress = 0;
+    this.animateLoading();
   }
 
-  async quickFill() {
-    const types = ['front', 'back', 'selfie'];
-    const images = [
-      'assets/images/OIP (1).jpeg',
-      'assets/images/OIP (2).jpeg',
-      'assets/images/OIP (3).jpeg'
+  private animateLoading() {
+    const steps = [
+      { target: 30, delay: 600 },
+      { target: 65, delay: 700 },
+      { target: 90, delay: 600 },
+      { target: 100, delay: 500 },
     ];
 
-    // First, make all boxes show the loading spinner
-    for (const type of types) {
-      if (!this.files[type]) {
-        this.isLoading[type] = true;
+    let i = 0;
+    const run = () => {
+      if (i >= steps.length) {
+        setTimeout(() => this.showResult(), 400);
+        return;
       }
-    }
+      this.loadingProgress = steps[i].target;
+      setTimeout(() => { i++; run(); }, steps[i - 1]?.delay ?? 600);
+    };
+    run();
+  }
 
-    // Then fill them one by one with a tiny delay
-    for (let i = 0; i < types.length; i++) {
-      const type = types[i];
-      if (this.files[type] && this.files[type] !== '') {
-        this.isLoading[type] = false;
-        continue;
-      }
+  private showResult() {
+    // Demo simulation: IDs starting with '1' succeed, others fail
+    const succeeds = this.nationalId.startsWith('1') || this.nationalId.length === 10;
+    this.verificationResult = succeeds ? 'success' : 'fail';
+    this.currentStep = 3;
 
-      await new Promise(resolve => setTimeout(resolve, 200)); // Visible loading for each
-      this.files[type] = images[i];
-      this.isLoading[type] = false;
+    if (succeeds) {
+      this.kyc.submitKyc('demo', 'demo', 'demo');
     }
   }
 
-  canSubmit() {
-    return this.files.front && this.files.back && this.files.selfie && !this.isSubmitting;
-  }
-
-  submit() {
-    this.isSubmitting = true;
-
-    // Aesthetic delay for the "wow" factor
-    setTimeout(() => {
-      this.kyc.submitKyc(this.files.front, this.files.back, this.files.selfie);
-      // The kycStatus will change to 'pending' which hides this form
-    }, 2000);
+  retry() {
+    this.currentStep = 1;
+    this.nationalId = '';
+    this.verificationResult = null;
+    this.loadingProgress = 0;
   }
 
   goDashboard() {

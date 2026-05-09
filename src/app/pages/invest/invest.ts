@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WalletService } from '../../services/wallet.service';
+import { InvestmentService } from '../../services/investment.service';
 
 @Component({
   selector: 'app-invest',
@@ -141,7 +142,7 @@ export class InvestComponent {
   showSuccess: boolean = false;
   errorMsg: string = '';
 
-  constructor(public wallet: WalletService) {
+  constructor(public wallet: WalletService, public invService: InvestmentService) {
     this.calculate();
   }
 
@@ -160,6 +161,19 @@ export class InvestComponent {
 
   confirmInvest() {
     if (this.wallet.deduct(this.amount)) {
+      this.invService.addInvestment({
+        name: 'أبراج الرقي التجاري (استثمار إضافي)',
+        type: 'تجاري',
+        location: 'الرياض',
+        amount: this.amount,
+        expectedReturn: this.totalReturn,
+        remainingMonths: 24,
+        progress: 0,
+        status: 'جديد',
+        statusBadgeClass: 'badge-blue',
+        img: 'assets/images/OIP (3).jpeg'
+      });
+      
       this.showSuccess = true;
       this.errorMsg = '';
     } else {

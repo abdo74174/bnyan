@@ -30,8 +30,8 @@ import { AuthService } from '../../services/auth.service';
             </p>
           </div>
 
-          <!-- Step Indicator -->
-          <div class="steps" *ngIf="(kyc.kycStatus$ | async) !== 'approved'">
+          <!-- Step Indicator - Hide if already approved -->
+          <div class="steps" *ngIf="(kyc.kycStatus$ | async) !== 'approved' || currentStep === 3">
             <div class="step" [class.active]="currentStep >= 1" [class.done]="currentStep > 1">
               <div class="step-circle">
                 <span *ngIf="currentStep <= 1">1</span>
@@ -55,7 +55,7 @@ import { AuthService } from '../../services/auth.service';
           </div>
 
           <!-- ── STEP 1: Input ── -->
-          <div class="form-section" *ngIf="currentStep === 1">
+          <div class="form-section" *ngIf="currentStep === 1 && (kyc.kycStatus$ | async) !== 'approved'">
             <div class="field-group">
               <label class="field-label">رقم الهوية الوطنية / الإقامة</label>
               <div class="input-wrapper">
@@ -150,7 +150,7 @@ import { AuthService } from '../../services/auth.service';
             <h3>تم التحقق من حسابك</h3>
             <p>حسابك موثق وجاهز للاستثمار.</p>
             <button class="btn-primary" (click)="goDashboard()">
-              <span class="btn-icon">🚀</span> انتقل للوحة التحكم
+              <span class="btn-icon">🚀</span> متابعة إلى لوحة التحكم
             </button>
           </div>
 

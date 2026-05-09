@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -694,7 +694,7 @@ export class KycComponent {
     return this.nationalId.slice(0, 3) + '****' + this.nationalId.slice(-2);
   }
 
-  constructor(public kyc: KycService, private auth: AuthService, private router: Router) { }
+  constructor(public kyc: KycService, private auth: AuthService, private router: Router, private ngZone: NgZone) { }
 
   startVerification() {
     this.currentStep = 2;
@@ -704,29 +704,29 @@ export class KycComponent {
 
   private animateLoading() {
     this.loadingProgress = 0;
+    const duration = 3000; // 3 seconds
+    const intervalTime = 50;
+    const startTime = Date.now();
 
-    // Step 1: 30% after 800ms
-    setTimeout(() => { this.loadingProgress = 30; }, 800);
+    // Run outside Angular zone for performance, re-enter for state changes
+    this.ngZone.runOutsideAngular(() => {
+      const timer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min((elapsed / duration) * 100, 100);
 
-    // Step 2: 65% after 1600ms
-    setTimeout(() => { this.loadingProgress = 65; }, 1600);
+        // Re-enter Angular zone so change detection fires
+        this.ngZone.run(() => {
+          this.loadingProgress = progress;
+        });
 
-    // Step 3: 90% after 2300ms
-    setTimeout(() => { this.loadingProgress = 90; }, 2300);
-
-    // Step 4: 100% after 2700ms
-    setTimeout(() => { this.loadingProgress = 100; }, 2700);
-
-    // Final Step: Show Result after 3.0s total
-    setTimeout(() => {
-      try {
-        this.showResult();
-      } catch (e) {
-        console.error('KYC Error:', e);
-        this.currentStep = 3;
-        this.verificationResult = 'fail';
-      }
-    }, 3000);
+        if (elapsed >= duration) {
+          clearInterval(timer);
+          this.ngZone.run(() => {
+            this.showResult();
+          });
+        }
+      }, intervalTime);
+    });
   }
 
   private showResult() {

@@ -705,16 +705,16 @@ export class KycComponent {
   private animateLoading() {
     this.loadingProgress = 0;
 
-    // Step 1: 30% after 0.8s
+    // Step 1: 30% after 800ms
     setTimeout(() => { this.loadingProgress = 30; }, 800);
 
-    // Step 2: 65% after 1.6s
+    // Step 2: 65% after 1600ms
     setTimeout(() => { this.loadingProgress = 65; }, 1600);
 
-    // Step 3: 90% after 2.3s
+    // Step 3: 90% after 2300ms
     setTimeout(() => { this.loadingProgress = 90; }, 2300);
 
-    // Step 4: 100% after 2.7s
+    // Step 4: 100% after 2700ms
     setTimeout(() => { this.loadingProgress = 100; }, 2700);
 
     // Final Step: Show Result after 3.0s total
@@ -730,13 +730,21 @@ export class KycComponent {
   }
 
   private showResult() {
+    const id = this.nationalId || '';
     // Demo simulation: IDs starting with '1' succeed, others fail
-    const succeeds = this.nationalId.startsWith('1') || this.nationalId.length === 10;
+    const succeeds = id.startsWith('1') || id.length === 10;
+
+    // Update UI state immediately
     this.verificationResult = succeeds ? 'success' : 'fail';
     this.currentStep = 3;
 
     if (succeeds) {
-      this.kyc.submitKyc('demo', 'demo', 'demo');
+      // Mock submission - wrap in try-catch to prevent blocking UI
+      try {
+        this.kyc.submitKyc('demo', 'demo', 'demo');
+      } catch (e) {
+        console.error('KycService Error:', e);
+      }
 
       // Auto-navigate to dashboard after 3 seconds of showing success
       setTimeout(() => {

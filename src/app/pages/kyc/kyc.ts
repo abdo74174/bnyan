@@ -716,7 +716,9 @@ export class KycComponent {
         return;
       }
       this.loadingProgress = steps[i].target;
-      setTimeout(() => { i++; run(); }, steps[i - 1]?.delay ?? 600);
+      const delay = steps[i].delay;
+      i++;
+      setTimeout(run, delay);
     };
     run();
   }

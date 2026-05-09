@@ -7,22 +7,50 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [RouterLink, CommonModule],
   template: `
-    <!-- Header -->
     <div class="dash-header">
       <div class="container">
         <div class="dash-welcome">مرحباً بك،</div>
         <div class="dash-name">أحمد الحربي</div>
         <div class="dash-kpis">
-          <div class="dash-kpi"><div class="dash-kpi-val">385,000</div><div class="dash-kpi-lbl">إجمالي المحفظة (ر.س)</div><div class="dash-kpi-change">↑ +50,000 هذا الشهر</div></div>
+          <div class="dash-kpi"><div class="dash-kpi-val">{{ totalInvestment | number }}</div><div class="dash-kpi-lbl">إجمالي الاستثمارات (ر.س)</div></div>
+          <div class="dash-kpi"><div class="dash-kpi-val">{{ totalEscrow | number }}</div><div class="dash-kpi-lbl">رصيد حساب الضمان (ر.س)</div><div class="dash-kpi-change" style="color:var(--text3)">أموال محتجزة وآمنة</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">69,300</div><div class="dash-kpi-lbl">العوائد المتوقعة (ر.س)</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">4</div><div class="dash-kpi-lbl">مشاريع نشطة</div></div>
-          <div class="dash-kpi"><div class="dash-kpi-val">18%</div><div class="dash-kpi-lbl">متوسط العائد</div><div class="dash-kpi-change">↑ +2% عن الهدف</div></div>
         </div>
       </div>
     </div>
 
     <section class="section-sm">
       <div class="container">
+        <!-- Escrow Wallet Card -->
+        <div class="card" style="padding:24px;margin-bottom:24px;background: linear-gradient(135deg, #1a4f8a 0%, #113661 100%); color: white;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+            <div>
+              <div style="font-size:14px;color:rgba(255,255,255,0.7)">رصيد حساب الضمان (Escrow Balance)</div>
+              <div style="font-size:32px;font-weight:800;margin-top:4px">{{ totalEscrow | number }} <span style="font-size:16px;font-weight:400">ر.س</span></div>
+            </div>
+            <div style="text-align:left">
+              <div style="font-size:14px;color:rgba(255,255,255,0.7)">الأموال المصروفة للمشاريع</div>
+              <div style="font-size:20px;font-weight:700;margin-top:4px;color:#2ecc87">{{ totalDrawn | number }} <span style="font-size:14px;font-weight:400">ر.س</span></div>
+            </div>
+          </div>
+          
+          <!-- Escrow Progress Bar -->
+          <div style="margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;color:rgba(255,255,255,0.8)">
+              <span>نسبة الصرف التراكمي: {{ escrowDrawnPercentage | number:'1.0-1' }}%</span>
+              <span>إجمالي الاستثمار: {{ totalInvestment | number }} ر.س</span>
+            </div>
+            <div style="height:10px;background:rgba(255,255,255,0.2);border-radius:10px;overflow:hidden">
+              <div [style.width.%]="escrowDrawnPercentage" style="height:100%;background:#2ecc87;border-radius:10px;transition:width 1s ease"></div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:6px;margin-top:16px">
+            <span style="display:inline-block;width:14px;height:14px;background:#2ecc87;border-radius:50%"></span> الأموال المصروفة 
+            <span style="display:inline-block;width:14px;height:14px;background:rgba(255,255,255,0.2);border-radius:50%;margin-right:12px"></span> الرصيد المحتجز (الضمان)
+          </div>
+        </div>
+
         <!-- Chart Card -->
         <div class="card" style="padding:24px;margin-bottom:24px">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
@@ -120,9 +148,25 @@ export class DashboardComponent {
   activeChip = '6 أشهر';
 
   investments = [
-    { id: 1, name: 'أبراج الرقي التجاري', type: 'تجاري', location: 'الرياض', amount: 50000, expectedReturn: 20000, remainingMonths: 14, progress: 42, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (1).jpeg' },
-    { id: 2, name: 'بوابة جدة', type: 'فندقي', location: 'جدة', amount: 100000, expectedReturn: 34000, remainingMonths: 8, progress: 70, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (4).jpeg' },
-    { id: 3, name: 'النخيل السكني', type: 'سكني', location: 'الدمام', amount: 75000, expectedReturn: 18000, remainingMonths: 22, progress: 15, status: 'جديد', statusBadgeClass: 'badge-blue', img: 'assets/images/OIP (5).jpeg' },
-    { id: 4, name: 'واجهة الخبر', type: 'مختلط', location: 'الخبر', amount: 160000, expectedReturn: 48640, remainingMonths: 16, progress: 25, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (6).jpeg' }
+    { id: 1, name: 'أبراج الرقي التجاري', type: 'تجاري', location: 'الرياض', amount: 50000, expectedReturn: 20000, remainingMonths: 14, progress: 25, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (1).jpeg' },
+    { id: 2, name: 'بوابة جدة', type: 'فندقي', location: 'جدة', amount: 100000, expectedReturn: 34000, remainingMonths: 8, progress: 50, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (4).jpeg' },
+    { id: 3, name: 'النخيل السكني', type: 'سكني', location: 'الدمام', amount: 75000, expectedReturn: 18000, remainingMonths: 22, progress: 0, status: 'جديد', statusBadgeClass: 'badge-blue', img: 'assets/images/OIP (5).jpeg' },
+    { id: 4, name: 'واجهة الخبر', type: 'مختلط', location: 'الخبر', amount: 160000, expectedReturn: 48640, remainingMonths: 16, progress: 10, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (6).jpeg' }
   ];
+
+  get totalInvestment() {
+    return this.investments.reduce((sum, inv) => sum + inv.amount, 0);
+  }
+
+  get totalDrawn() {
+    return this.investments.reduce((sum, inv) => sum + (inv.amount * (inv.progress / 100)), 0);
+  }
+
+  get totalEscrow() {
+    return this.totalInvestment - this.totalDrawn;
+  }
+
+  get escrowDrawnPercentage() {
+    return this.totalInvestment === 0 ? 0 : (this.totalDrawn / this.totalInvestment) * 100;
+  }
 }

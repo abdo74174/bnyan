@@ -18,6 +18,7 @@ import { InvestmentService, Investment } from '../../services/investment.service
           <div class="dash-kpi"><div class="dash-kpi-val">{{ totalInvestment | number }}</div><div class="dash-kpi-lbl">إجمالي الاستثمارات (ر.س)</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">{{ totalEscrow | number }}</div><div class="dash-kpi-lbl">رصيد حساب الضمان (ر.س)</div><div class="dash-kpi-change" style="color:var(--text3)">أموال محتجزة وآمنة</div></div>
           <div class="dash-kpi"><div class="dash-kpi-val">{{ totalExpectedReturn | number }}</div><div class="dash-kpi-lbl">العوائد المتوقعة (ر.س)</div></div>
+          <div class="dash-kpi"><div class="dash-kpi-val">{{ averageRoi | number:'1.1-1' }}%</div><div class="dash-kpi-lbl">متوسط العائد الكلي</div></div>
         </div>
       </div>
     </div>
@@ -163,6 +164,11 @@ export class DashboardComponent {
 
   get totalExpectedReturn() {
     return this.investments.reduce((sum, inv) => sum + inv.expectedReturn, 0);
+  }
+
+  get averageRoi() {
+    if (this.totalInvestment === 0) return 0;
+    return (this.totalExpectedReturn / this.totalInvestment) * 100;
   }
 
   get totalDrawn() {

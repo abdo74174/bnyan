@@ -144,8 +144,8 @@ import { AuthService } from '../../services/auth.service';
             </button>
           </div>
 
-          <!-- Approved Status (from service) -->
-          <div class="result-section success-result" *ngIf="(kyc.kycStatus$ | async) === 'approved'">
+          <!-- Approved Status (from service) - Only show if not currently in step 3 result -->
+          <div class="result-section success-result" *ngIf="(kyc.kycStatus$ | async) === 'approved' && currentStep !== 3">
             <div class="result-icon success-icon">✓</div>
             <h3>تم التحقق من حسابك</h3>
             <p>حسابك موثق وجاهز للاستثمار.</p>

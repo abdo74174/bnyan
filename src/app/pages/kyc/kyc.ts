@@ -704,17 +704,17 @@ export class KycComponent {
 
   private animateLoading() {
     const steps = [
-      { target: 30, delay: 1400 },
-      { target: 65, delay: 1400 },
-      { target: 90, delay: 1200 },
-      { target: 100, delay: 600 },
+      { target: 30, delay: 800 },
+      { target: 65, delay: 800 },
+      { target: 90, delay: 700 },
+      { target: 100, delay: 400 },
     ];
 
     let i = 0;
     const run = () => {
       if (i >= steps.length) {
-        // Final transition to results exactly at the 5s mark (1.4+1.4+1.2+0.6 + 0.4 = 5.0)
-        setTimeout(() => this.showResult(), 400);
+        // Final transition to results exactly at the 3s mark (0.8+0.8+0.7+0.4 + 0.3 = 3.0)
+        setTimeout(() => this.showResult(), 300);
         return;
       }
       this.loadingProgress = steps[i].target;

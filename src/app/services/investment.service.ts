@@ -23,7 +23,7 @@ export class InvestmentService {
     { id: 1, name: 'أبراج الرقي التجاري', type: 'تجاري', location: 'الرياض', amount: 50000, expectedReturn: 20000, remainingMonths: 14, progress: 25, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (1).jpeg' },
     { id: 2, name: 'بوابة جدة', type: 'فندقي', location: 'جدة', amount: 100000, expectedReturn: 34000, remainingMonths: 8, progress: 50, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (4).jpeg' },
     { id: 3, name: 'النخيل السكني', type: 'سكني', location: 'الدمام', amount: 75000, expectedReturn: 18000, remainingMonths: 22, progress: 0, status: 'جديد', statusBadgeClass: 'badge-blue', img: 'assets/images/OIP (5).jpeg' },
-    { id: 4, name: 'واجهة الخبر', type: 'مختلط', location: 'الخبر', amount: 160000, expectedReturn: 48640, remainingMonths: 16, progress: 10, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (6).jpeg' }
+    { id: 4, name: 'واجهة الخبر', type: 'مختلط', location: 'الخبر', amount: 160000, expectedReturn: 48640, remainingMonths: 16, progress: 25, status: 'نشط', statusBadgeClass: 'badge-green', img: 'assets/images/OIP (6).jpeg' }
   ];
 
   private investmentsSubject = new BehaviorSubject<Investment[]>(this.loadFromStorage());
@@ -31,19 +31,19 @@ export class InvestmentService {
 
   constructor() {
     window.addEventListener('storage', (event) => {
-      if (event.key === 'bnyan_investments') {
+      if (event.key === 'bnyan_investments_v2') {
         this.investmentsSubject.next(this.loadFromStorage());
       }
     });
   }
 
   private loadFromStorage(): Investment[] {
-    const stored = localStorage.getItem('bnyan_investments');
+    const stored = localStorage.getItem('bnyan_investments_v2');
     return stored ? JSON.parse(stored) : this.initialInvestments;
   }
 
   private saveToStorage(data: Investment[]) {
-    localStorage.setItem('bnyan_investments', JSON.stringify(data));
+    localStorage.setItem('bnyan_investments_v2', JSON.stringify(data));
     this.investmentsSubject.next(data);
   }
 

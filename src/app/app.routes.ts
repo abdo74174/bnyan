@@ -3,6 +3,7 @@ import { HomeComponent } from './pages/home/home';
 import { ProjectsComponent } from './pages/projects/projects';
 import { DetailComponent } from './pages/detail/detail';
 import { ProjectDetailComponent } from './pages/project-detail/project-detail';
+import { AddProjectComponent } from './pages/add-project/add-project';
 import { InvestComponent } from './pages/invest/invest';
 import { PaymentComponent } from './pages/payment/payment';
 import { PaymentSuccessComponent } from './pages/payment-success/payment-success';
@@ -42,4 +43,5 @@ export const routes: Routes = [
   // Dashboard Routes with Role Guards
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard, roleGuard('investor')] },
   { path: 'developer', component: DeveloperComponent, canActivate: [authGuard, roleGuard('developer')] },
+  { path: 'add-project', component: AddProjectComponent, canActivate: [authGuard, roleGuard('developer')] },
 ];

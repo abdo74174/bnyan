@@ -233,6 +233,7 @@ import { InvestmentService, Investment } from '../../services/investment.service
                 </div>
 
                 <div class="action-row">
+                  <a routerLink="/add-project" class="btn btn-primary btn-sm">إضافة مشروع جديد</a>
                   <button class="btn btn-ghost btn-sm">تعديل الملف</button>
                   <button class="btn btn-ghost btn-sm">تقارير المشاريع</button>
                 </div>

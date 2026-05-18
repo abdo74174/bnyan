@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ProjectService, Project } from '../../services/project.service';
 
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, FormsModule],
   template: `
     <section class="section-sm">
       <div class="container">
@@ -14,21 +16,44 @@ import { CommonModule } from '@angular/common';
           <h1 class="section-title">المشاريع العقارية المتاحة</h1>
           <p class="section-sub">مشاريع مدروسة ومعروضة بشفافية كاملة</p>
         </div>
+
         <!-- Filters -->
         <div class="filters">
           <span class="filter-lbl">تصفية:</span>
-          <select class="filter-select"><option>كل المدن</option><option>الرياض</option><option>جدة</option><option>الدمام</option><option>الخبر</option></select>
-          <select class="filter-select"><option>كل الأسعار</option><option>أقل من 25,000</option><option>25,000 – 100,000</option><option>أكثر من 100,000</option></select>
-          <select class="filter-select"><option>كل العوائد</option><option>أقل من 15%</option><option>15% – 20%</option><option>أكثر من 20%</option></select>
+          <select class="filter-select" [(ngModel)]="filterCity" (ngModelChange)="applyFilter()">
+            <option value="">كل المدن</option>
+            <option value="الرياض">الرياض</option>
+            <option value="جدة">جدة</option>
+            <option value="الدمام">الدمام</option>
+            <option value="الخبر">الخبر</option>
+            <option value="المدينة">المدينة المنورة</option>
+          </select>
+          <select class="filter-select" [(ngModel)]="filterRoi" (ngModelChange)="applyFilter()">
+            <option value="">كل العوائد</option>
+            <option value="low">أقل من 17%</option>
+            <option value="mid">17% – 20%</option>
+            <option value="high">أكثر من 20%</option>
+          </select>
+          <select class="filter-select" [(ngModel)]="filterRisk" (ngModelChange)="applyFilter()">
+            <option value="">كل المخاطر</option>
+            <option value="منخفضة">منخفضة</option>
+            <option value="متوسطة">متوسطة</option>
+          </select>
           <span style="height:24px;width:1px;background:var(--border)"></span>
           @for (chip of chips; track chip) {
             <button class="filter-chip" [class.active]="activeChip === chip" (click)="setChip(chip)">{{chip}}</button>
           }
         </div>
+
+        <!-- Results Count -->
+        <div style="font-size:13px;color:var(--text3);margin-bottom:20px">
+          عرض <strong>{{filtered.length}}</strong> مشروع من أصل {{allProjects.length}}
+        </div>
+
         <!-- Cards -->
         <div class="grid-3">
-          @for (project of projects; track project.id) {
-            <div class="proj-card" routerLink="/detail">
+          @for (project of filtered; track project.id) {
+            <div class="proj-card" [routerLink]="['/project', project.id]">
               <div class="proj-card-img">
                 <img [src]="project.img" [alt]="project.name">
                 <div class="proj-card-img-overlay"></div>
@@ -50,6 +75,10 @@ import { CommonModule } from '@angular/common';
                     <div class="proj-metric-val">{{project.duration}} شهراً</div>
                     <div class="proj-metric-lbl">المدة</div>
                   </div>
+                  <div class="proj-metric">
+                    <div class="proj-metric-val">{{project.minInvest | number}}</div>
+                    <div class="proj-metric-lbl">حد أدنى ر.س</div>
+                  </div>
                 </div>
                 <div class="prog-wrap">
                   <div class="prog-header">
@@ -61,34 +90,67 @@ import { CommonModule } from '@angular/common';
                   </div>
                 </div>
                 <div class="proj-card-footer">
-                  <div class="proj-min">حد أدنى <strong>{{project.minInvest}} ر.س</strong></div>
-                  <a routerLink="/detail" class="btn btn-primary btn-sm">التفاصيل ←</a>
+                  <div class="proj-min">حد أدنى <strong>{{project.minInvest | number}} ر.س</strong></div>
+                  <div style="display:flex;gap:8px">
+                    <a [routerLink]="['/payment', project.id]" class="btn btn-accent btn-sm" (click)="$event.stopPropagation()">استثمر ←</a>
+                    <a [routerLink]="['/project', project.id]" class="btn btn-primary btn-sm" (click)="$event.stopPropagation()">التفاصيل</a>
+                  </div>
                 </div>
               </div>
+            </div>
+          }
+
+          @if (filtered.length === 0) {
+            <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text3)">
+              <div style="font-size:48px;margin-bottom:12px">🔍</div>
+              <div style="font-size:16px;font-weight:700">لا توجد مشاريع تطابق الفلترة المحددة</div>
+              <button class="btn btn-ghost" style="margin-top:16px" (click)="resetFilters()">إعادة ضبط الفلاتر</button>
             </div>
           }
         </div>
       </div>
     </section>
   `,
-  styles: [`
-    :host { display: block; }
-  `]
+  styles: [`:host { display: block; }`]
 })
 export class ProjectsComponent {
-  chips = ['الكل', 'سكني', 'تجاري', 'فندقي'];
+  chips = ['الكل', 'سكني', 'تجاري', 'فندقي', 'مختلط', 'ضيافة'];
   activeChip = 'الكل';
+  filterCity = '';
+  filterRoi = '';
+  filterRisk = '';
 
-  projects = [
-    { id: 1, name: 'أبراج الرقي التجاري', location: 'الرياض', type: 'تجاري', category: 'تطوير تجاري', img: 'assets/images/OIP (3).jpeg', roi: 20, duration: 24, progress: 73, remaining: '810,000', minInvest: '10,000', risk: 'منخفضة', typeBadgeClass: 'badge-blue' },
-    { id: 2, name: 'بوابة جدة', location: 'جدة', type: 'فندقي', category: 'شقق فندقية', img: 'assets/images/OIP (4).jpeg', roi: 17, duration: 18, progress: 45, remaining: '1.65م', minInvest: '25,000', risk: 'متوسطة', typeBadgeClass: 'badge-gold' },
-    { id: 3, name: 'النخيل السكني', location: 'الدمام', type: 'سكني', category: 'سكني راقٍ', img: 'assets/images/OIP (5).jpeg', roi: 16, duration: 30, progress: 88, remaining: '360,000', minInvest: '10,000', risk: 'منخفضة', typeBadgeClass: 'badge-blue' },
-    { id: 4, name: 'واجهة الخبر', location: 'الخبر', type: 'مختلط', category: 'مختلط تجاري-سكني', img: 'assets/images/OIP (6).jpeg', roi: 19, duration: 20, progress: 31, remaining: '2.07م', minInvest: '15,000', risk: 'منخفضة', typeBadgeClass: 'badge-blue' },
-    { id: 5, name: 'ريزيدنس العليا', location: 'الرياض', type: 'ضيافة', category: 'شقق ضيافة فاخرة', img: 'assets/images/OIP (7).jpeg', roi: 22, duration: 36, progress: 60, remaining: '1.2م', minInvest: '50,000', risk: 'متوسطة', typeBadgeClass: 'badge-gold' },
-    { id: 6, name: 'الياسمين السكني', location: 'المدينة المنورة', type: 'سكني', category: 'مبنى سكني', img: 'assets/images/OIP (8).jpeg', roi: 15, duration: 24, progress: 95, remaining: '125,000', minInvest: '10,000', risk: 'منخفضة', typeBadgeClass: 'badge-blue' }
-  ];
+  allProjects: Project[];
+  filtered: Project[];
+
+  constructor(private projectService: ProjectService) {
+    this.allProjects = this.projectService.getAll();
+    this.filtered = [...this.allProjects];
+  }
 
   setChip(chip: string) {
     this.activeChip = chip;
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    this.filtered = this.allProjects.filter(p => {
+      const chipMatch = this.activeChip === 'الكل' || p.type === this.activeChip;
+      const cityMatch = !this.filterCity || p.location.includes(this.filterCity);
+      const riskMatch = !this.filterRisk || p.risk === this.filterRisk;
+      let roiMatch = true;
+      if (this.filterRoi === 'low') roiMatch = p.roi < 17;
+      else if (this.filterRoi === 'mid') roiMatch = p.roi >= 17 && p.roi <= 20;
+      else if (this.filterRoi === 'high') roiMatch = p.roi > 20;
+      return chipMatch && cityMatch && riskMatch && roiMatch;
+    });
+  }
+
+  resetFilters() {
+    this.activeChip = 'الكل';
+    this.filterCity = '';
+    this.filterRoi = '';
+    this.filterRisk = '';
+    this.filtered = [...this.allProjects];
   }
 }

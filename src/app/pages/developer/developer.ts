@@ -6,7 +6,7 @@ import { InvestmentService, Investment } from '../../services/investment.service
 @Component({
   selector: 'app-developer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   template: `
     <!-- Dev Header -->
     <div class="dev-header">
